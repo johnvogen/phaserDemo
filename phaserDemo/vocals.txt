@@ -1,0 +1,20 @@
+p, bed, mouse   2
+t, dig, lay, nap 4
+S, jump, ship 4
+T, then, thin 2
+f, five, vest 2
+k, game, house 1
+i, yes 4
+k, cat 4
+r, red 2
+s, seem,zero 1
+u, west 6
+@, arena 6
+a, tr-a-p 0
+e, f-a-ce 3
+E, nurse 4
+o, goat 6
+O, choice, 7
+sil, [no speech]
+
+
