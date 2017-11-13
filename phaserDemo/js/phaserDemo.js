@@ -29,6 +29,17 @@ var firstState = {
 
         var text1 = game.add.text(game.world.centerX, game.world.centerY, "first", { font: "16px Arial", fill: "#ff0044", align: "center" });
 
+        text1.inputEnabled = true;
+        text1.events.onInputUp.add(up, this);
+
+        text1.events.onInputOver.add(function () {
+            this.game.canvas.style.cursor = "pointer";
+        }, this);
+        text1.events.onInputOut.add(function () {
+            this.game.canvas.style.cursor = "default";
+        }, this);
+
+
         //    game.add.sprite(10,20,'image');
         var prior_vtime = 999;
         var duration = 0;
@@ -52,9 +63,6 @@ var firstState = {
         ben.add(heads);
         ben.add(eyes);
         ben.add(body);
-
-        text1.inputEnabled = true;
-        text1.events.onInputUp.add(up, this);
 
         // Set a default head postion for initial postion and after lip sync
         heads.frame = default_head;
@@ -131,10 +139,19 @@ var secondState = {
 
     create: function () {
 
-        var text = game.add.text(game.world.centerX, game.world.centerY, "second", { font: "16px Arial", fill: "#ff0044", align: "center" });
-        text.anchor.set(0.5);
-        text.inputEnabled = true;
-        text.events.onInputUp.add(up, this);
+        var text1 = game.add.text(game.world.centerX, game.world.centerY, "second", { font: "16px Arial", fill: "#ff0044", align: "center" });
+
+        text1.inputEnabled = true;
+        text1.events.onInputUp.add(up, this);
+
+        text1.events.onInputOver.add(function () {
+            this.game.canvas.style.cursor = "pointer";
+        }, this);
+        text1.events.onInputOut.add(function () {
+            this.game.canvas.style.cursor = "default";
+        }, this);
+
+
 
         //    game.add.sprite(10,20,'image');
         var prior_vtime = 999;
@@ -234,10 +251,17 @@ var thirdState = {
 
     create: function () {
 
-        var text = game.add.text(game.world.centerX, game.world.centerY, "third", { font: "16px Arial", fill: "#ff0044", align: "center" });
-        text.anchor.set(0.5);
-        text.inputEnabled = true;
-        text.events.onInputUp.add(up, this);
+        var text1 = game.add.text(game.world.centerX, game.world.centerY, "third", { font: "16px Arial", fill: "#ff0044", align: "center" });
+        
+        text1.inputEnabled = true;
+        text1.events.onInputUp.add(up, this);
+
+        text1.events.onInputOver.add(function () {
+            this.game.canvas.style.cursor = "pointer";
+        }, this);
+        text1.events.onInputOut.add(function () {
+            this.game.canvas.style.cursor = "default";
+        }, this);
 
 
         //    game.add.sprite(10,20,'image');
@@ -361,6 +385,14 @@ function up(item) {
 
 }
 
+function over(item) {
+
+    item.fill = "#ffff44";
+    item.text = "clicked " + clicks + " times";
+
+
+}
+
 function getByValue(arr, value) {
     for (var i = 0, iLen = arr.length; i < iLen; i++) {
         if (arr[i].viseme === value) return arr[i];
@@ -384,3 +416,4 @@ game.state.add('first', firstState);
 game.state.add('second', secondState);
 game.state.add('third', thirdState);
 game.state.start('boot');
+
