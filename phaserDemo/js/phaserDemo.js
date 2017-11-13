@@ -381,15 +381,8 @@ function up(item) {
         game.state.start('third');
     } else {
         game.state.start('first');
+        $("#results").css("display","block");
     }
-
-}
-
-function over(item) {
-
-    item.fill = "#ffff44";
-    item.text = "clicked " + clicks + " times";
-
 
 }
 
