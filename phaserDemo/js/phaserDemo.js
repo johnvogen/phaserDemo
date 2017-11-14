@@ -8,6 +8,13 @@ var body;
 var ben;
 var clipduration;
 
+
+var firstText = "First Text";
+var secondText = "Second Text";
+var thirdText = "Third Text";
+var waitText = "Wait Text";
+var mainState = "";
+
 var bootState = {
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -27,7 +34,9 @@ var firstState = {
 
     create: function () {
 
-        var text1 = game.add.text(game.world.centerX, game.world.centerY, "first", { font: "16px Arial", fill: "#ff0044", align: "center" });
+        var text1 = game.add.text(game.world.centerX, game.world.height - game.world.height, firstText, { font: "16px Arial", fill: "#ff0044" });
+        var text1a = game.add.text(game.world.centerX, game.world.centerY + 40, "I'm good at managing a budget.", { font: "16px Arial", fill: "#ff0044", align: "center" });
+        var text1b = game.add.text(game.world.centerX, game.world.centerY + 80, "I could use some help.", { font: "16px Arial", fill: "#ff0044", align: "center" });
 
         text1.inputEnabled = true;
         text1.events.onInputUp.add(up, this);
@@ -52,7 +61,7 @@ var firstState = {
         // set a ms threshold to discard lipsync frames with short durattion
         const viseme_threshold = 35;
 
-        game.stage.backgroundColor = '#ffffff';
+        game.stage.backgroundColor = '#eeeeee';
         heads = game.add.sprite(300, 10, 'heads')
         eyes = game.add.sprite(405, 95, 'eyes');
         body = game.add.sprite(280, 353, 'body');
@@ -117,12 +126,25 @@ var firstState = {
         if (tick <= clipduration) {
             heads.frame = timeline[tick].head;
         }
+
+
+        if (audiotrack.currentTime > audiotrack.totalDuration * 1000) {
+
+            mainState = "first";
+            game.state.start('wait');
+        }
+
+
+
     },
 
     render: function () {
         game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
         game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
         game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+
     }
 
 }
@@ -139,7 +161,7 @@ var secondState = {
 
     create: function () {
 
-        var text1 = game.add.text(game.world.centerX, game.world.centerY, "second", { font: "16px Arial", fill: "#ff0044", align: "center" });
+        var text1 = game.add.text(game.world.centerX, game.world.centerY, secondText, { font: "16px Arial", fill: "#ff0044", align: "center" });
 
         text1.inputEnabled = true;
         text1.events.onInputUp.add(up, this);
@@ -230,6 +252,15 @@ var secondState = {
         if (tick <= clipduration) {
             heads.frame = timeline[tick].head;
         }
+
+        if (audiotrack.currentTime > audiotrack.totalDuration * 1000) {
+
+            mainState = "second";
+            game.state.start('wait');
+        }
+
+
+
     },
 
     render: function () {
@@ -251,7 +282,7 @@ var thirdState = {
 
     create: function () {
 
-        var text1 = game.add.text(game.world.centerX, game.world.centerY, "third", { font: "16px Arial", fill: "#ff0044", align: "center" });
+        var text1 = game.add.text(game.world.centerX, game.world.centerY, thirdText, { font: "16px Arial", fill: "#ff0044", align: "center" });
         
         text1.inputEnabled = true;
         text1.events.onInputUp.add(up, this);
@@ -343,6 +374,13 @@ var thirdState = {
         if (tick <= clipduration) {
             heads.frame = timeline[tick].head;
         }
+
+        if (audiotrack.currentTime > audiotrack.totalDuration * 1000) {
+
+            mainState = "third";
+            game.state.start('wait');
+        }
+
     },
 
     render: function () {
@@ -351,6 +389,136 @@ var thirdState = {
         game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
     }
 }
+
+
+
+var waitSequence = {
+
+    preload: function () {
+        game.load.spritesheet('heads', 'heads.png', 297, 354, 12);
+        game.load.spritesheet('eyes', 'eyes.png', 106, 128, 11);
+        game.load.image('body', 'body.png');
+        game.load.json('viseme', 'testing.json');
+        game.load.audio('intro', 'testing.mp3');
+    },
+
+    create: function () {
+
+
+
+
+        if (mainState === "first") {
+            waitText = firstText;
+        } else if (mainState === "second") {
+            waitText = secondText;
+        } else if (mainState === "third") {
+            waitText = thirdText;
+        }
+
+
+        var text1 = game.add.text(game.world.centerX, game.world.height - game.world.height, waitText, { font: "16px Arial", fill: "#ff0044" });
+
+        text1.inputEnabled = true;
+        text1.events.onInputUp.add(up, this);
+
+        text1.events.onInputOver.add(function () {
+            this.game.canvas.style.cursor = "pointer";
+        }, this);
+        text1.events.onInputOut.add(function () {
+            this.game.canvas.style.cursor = "default";
+        }, this);
+
+
+        //    game.add.sprite(10,20,'image');
+        var prior_vtime = 999;
+        var duration = 0;
+        var count = 0;
+        const default_head = 10;
+        var prior_vframe = default_head;
+        var i = 0;
+
+        // It's visually distracting when the lip frames change too quickly.
+        // set a ms threshold to discard lipsync frames with short durattion
+        const viseme_threshold = 35;
+
+        game.stage.backgroundColor = '#eeeeee';
+        heads = game.add.sprite(300, 10, 'heads')
+        eyes = game.add.sprite(405, 95, 'eyes');
+        body = game.add.sprite(280, 353, 'body');
+
+        // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
+        // individual sprites for moving and scaling the character
+        ben = game.add.group();
+        ben.add(heads);
+        ben.add(eyes);
+        ben.add(body);
+
+        // Set a default head postion for initial postion and after lip sync
+        heads.frame = default_head;
+        eyes.frame = 1;
+
+        audiotrack = game.add.audio('intro');
+        timer = game.time.create(false);
+
+        var gameJSON = game.cache.getJSON('viseme');
+        for (var key in gameJSON) {
+            if (gameJSON.hasOwnProperty(key)) {
+                vtype = gameJSON[key].type;
+                vtime = gameJSON[key].time;
+                vvalue = gameJSON[key].value;
+                if (count > 0) {
+                    vframe = getByValue(vframes, vvalue).frame;
+                    // determine display duration
+                    duration = vtime - prior_vtime;
+                    // Only display frames with sufficient duration
+                    if (duration > viseme_threshold) {
+                        for (i = i; i < Math.round(vtime / 10); i++) {
+                            timeline[i] = { "head": prior_vframe };
+                        }
+                        timeline[i] = { "head": vframe };
+                    }
+                    prior_vtime = vtime;
+                    prior_vframe = vframe;
+                }
+            }
+            count++;
+        }
+
+        // Add 1/2 second of default head position.. This helps account for missed ticks and timing differences between
+        // phaser vs. audio file timing 
+        var extension = i + 50;
+        for (i = i + 1; i <= extension; i++) {
+            timeline[i] = { "head": default_head };
+        }
+        clipduration = i;
+
+        // Scale sprite group to 55%
+        ben.scale.setTo(.55, .55);
+        audiotrack.play();
+
+        // Possibly blink eyes every 1/2 second
+        timer.repeat(500, 20000, function () { blink(eyes); }, this);
+        timer.start();
+    },
+
+    update: function () {
+        var tick = Math.round(audiotrack.currentTime / 10);
+        if (tick <= clipduration) {
+            heads.frame = timeline[tick].head;
+        }
+    },
+
+    render: function () {
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+    }
+
+}
+
+
+
+
 
 var vframes = [
     { viseme: "p", frame: 9 },
@@ -379,9 +547,11 @@ function up(item) {
         game.state.start('second');
     } else if (game.state.current == "second") {
         game.state.start('third');
+    } else if (game.state.current == "third") {
+        game.state.start('wait');
+        $("#results").css("display", "block");
     } else {
         game.state.start('first');
-        $("#results").css("display","block");
     }
 
 }
@@ -402,11 +572,13 @@ function blink(sprite) {
     else { sprite.frame = 1; }
 };
 
-var game = new Phaser.Game(800, 500, Phaser.AUTO, 'gameDiv');
+var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'gameDiv');
+
 
 game.state.add('boot', bootState);
 game.state.add('first', firstState);
 game.state.add('second', secondState);
 game.state.add('third', thirdState);
+game.state.add('wait', waitSequence);
 game.state.start('boot');
 
