@@ -1,4 +1,6 @@
-﻿var thirdState = {
+﻿var thirdState = function (game) { };
+
+thirdState.prototype = {
 
     preload: function () {
         game.load.spritesheet('heads', 'heads.png', 297, 354, 12);
@@ -128,4 +130,4 @@
         game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
         game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
     }
-}
+};

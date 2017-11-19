@@ -1,4 +1,6 @@
-﻿var waitSequence = {
+﻿var waitSequence = function (game) { };
+
+waitSequence.prototype = {
 
     preload: function () {
         game.load.spritesheet('heads', 'heads.png', 297, 354, 12);
@@ -141,4 +143,4 @@
         game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
     }
 
-}
+};
