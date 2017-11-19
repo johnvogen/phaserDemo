@@ -1,6 +1,12 @@
-﻿var firstState = function (game) { };
+﻿firstState = function (game) { };
 
 firstState.prototype = {
+
+    init: function () {
+        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+    },
 
     preload: function () {
         game.load.spritesheet('heads', 'heads.png', 297, 354, 12);

@@ -1,4 +1,14 @@
-﻿var vtype;
+﻿var TheGame = {
+};
+
+TheGame.Params = {
+    baseWidth: 1920,
+    baseHeight: 1080,
+    iconSize: 364
+};
+
+
+var vtype;
 var vtime;
 var vvalue;
 var timeline = {};
@@ -87,13 +97,19 @@ function blink(sprite) {
     else { sprite.frame = 1; }
 };
 
-var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'gameDiv');
 
 
-game.state.add('boot', bootState);
-game.state.add('first', firstState);
-game.state.add('second', secondState);
-game.state.add('third', thirdState);
-game.state.add('wait', waitSequence);
-game.state.start('boot');
+var game;
+window.onload = function () {
 
+    game = new Phaser.Game(1280, 720, Phaser.AUTO, 'gameDiv');
+
+
+    game.state.add('boot', bootState);
+    game.state.add('first', firstState);
+    game.state.add('second', secondState);
+    game.state.add('third', thirdState);
+    game.state.add('wait', waitSequence);
+    game.state.start('boot');
+
+};
