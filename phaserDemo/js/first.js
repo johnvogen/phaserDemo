@@ -1,6 +1,6 @@
-﻿firstState = function (game) { };
+﻿TheGame.firstState = function (game) { };
 
-firstState.prototype = {
+TheGame.firstState.prototype = {
 
     init: function () {
         //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;

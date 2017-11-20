@@ -1,6 +1,6 @@
-﻿var thirdState = function (game) { };
+﻿TheGame.thirdState = function (game) { };
 
-thirdState.prototype = {
+TheGame.thirdState.prototype = {
 
     preload: function () {
         game.load.spritesheet('heads', 'heads.png', 297, 354, 12);

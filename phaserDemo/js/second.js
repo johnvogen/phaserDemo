@@ -1,6 +1,6 @@
-﻿var secondState = function (game) { };
+﻿TheGame.secondState = function (game) { };
 
-secondState.prototype = {
+TheGame.secondState.prototype = {
 
     preload: function () {
         game.load.spritesheet('heads', 'heads.png', 297, 354, 12);

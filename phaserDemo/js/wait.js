@@ -1,6 +1,6 @@
-﻿var waitSequence = function (game) { };
+﻿TheGame.waitSequence = function (game) { };
 
-waitSequence.prototype = {
+TheGame.waitSequence.prototype = {
 
     preload: function () {
         game.load.spritesheet('heads', 'heads.png', 297, 354, 12);
