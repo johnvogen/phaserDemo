@@ -2,9 +2,9 @@
 };
 
 TheGame.Params = {
-    baseWidth: 1920,
-    baseHeight: 1080,
-    iconSize: 364
+    //baseWidth: 1920,
+    //baseHeight: 1080,
+    //iconSize: 364
 };
 
 
