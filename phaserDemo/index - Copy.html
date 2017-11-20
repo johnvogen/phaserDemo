@@ -28,16 +28,16 @@
 
         //bootState************************************************************************
 
-        TheGame.bootState = function (game) {
-            TheGame.bootState.prototype = {
+        TheGame.bootState = function (game) { };
+        TheGame.bootState.prototype = {
 
-                create: function () {
-                    game.physics.startSystem(Phaser.Physics.ARCADE);
-                    game.state.start('first');
-                }
+            create: function () {
+                game.physics.startSystem(Phaser.Physics.ARCADE);
+                game.state.start('first');
             }
+        }
 
-        };
+
 
         //firstState************************************************************************
         TheGame.firstState = function (game) { };
@@ -104,7 +104,7 @@
                 eyes = game.add.sprite(405, 95, 'eyes');
                 body = game.add.sprite(280, 353, 'body');
 
-                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
+                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with
                 // individual sprites for moving and scaling the character
                 ben = game.add.group();
                 ben.add(heads);
@@ -143,7 +143,7 @@
                 }
 
                 // Add 1/2 second of default head position.. This helps account for missed ticks and timing differences between
-                // phaser vs. audio file timing 
+                // phaser vs. audio file timing
                 var extension = i + 50;
                 for (i = i + 1; i <= extension; i++) {
                     timeline[i] = { "head": default_head };
@@ -245,7 +245,7 @@
                 eyes = game.add.sprite(405, 95, 'eyes');
                 body = game.add.sprite(280, 353, 'body');
 
-                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
+                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with
                 // individual sprites for moving and scaling the character
                 ben = game.add.group();
                 ben.add(heads);
@@ -284,7 +284,7 @@
                 }
 
                 // Add 1/2 second of default head position.. This helps account for missed ticks and timing differences between
-                // phaser vs. audio file timing 
+                // phaser vs. audio file timing
                 var extension = i + 50;
                 for (i = i + 1; i <= extension; i++) {
                     timeline[i] = { "head": default_head };
@@ -381,7 +381,7 @@
                 eyes = game.add.sprite(405, 95, 'eyes');
                 body = game.add.sprite(280, 353, 'body');
 
-                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
+                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with
                 // individual sprites for moving and scaling the character
                 ben = game.add.group();
                 ben.add(heads);
@@ -420,7 +420,7 @@
                 }
 
                 // Add 1/2 second of default head position.. This helps account for missed ticks and timing differences between
-                // phaser vs. audio file timing 
+                // phaser vs. audio file timing
                 var extension = i + 50;
                 for (i = i + 1; i <= extension; i++) {
                     timeline[i] = { "head": default_head };
@@ -538,7 +538,7 @@
                 eyes = game.add.sprite(405, 95, 'eyes');
                 body = game.add.sprite(280, 353, 'body');
 
-                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
+                // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with
                 // individual sprites for moving and scaling the character
                 ben = game.add.group();
                 ben.add(heads);
@@ -577,7 +577,7 @@
                 }
 
                 // Add 1/2 second of default head position.. This helps account for missed ticks and timing differences between
-                // phaser vs. audio file timing 
+                // phaser vs. audio file timing
                 var extension = i + 50;
                 for (i = i + 1; i <= extension; i++) {
                     timeline[i] = { "head": default_head };
@@ -718,7 +718,7 @@
     </script>
 
 
-    
+
 </head>
 <body>
 
