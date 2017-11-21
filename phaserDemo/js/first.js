@@ -18,7 +18,7 @@ TheGame.firstState.prototype = {
 
     create: function () {
 
-
+        var style = { font: "24px Arial", fill: "#ffffff" };
 
         var text1 = game.add.text(game.world.centerX, 100, text1_1, style);
         var text2 = game.add.text(game.world.centerX, 140, text1_2, style);
