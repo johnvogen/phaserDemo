@@ -3,10 +3,6 @@
 
 }
 
-
-
-
-
 /*Added bootstrap styles for demo page - can be removed*/
 
 /* Remove the navbar's default margin-bottom and rounded borders */
@@ -23,7 +19,7 @@
 /* Set gray background color and 100% height */
 .sidenav {
     padding-top: 20px;
-    background-color: #f1f1f1;
+    background-color: #eeeeee;
     height: 100%;
 }
 
@@ -32,6 +28,7 @@ footer {
     background-color: #555;
     color: white;
     padding: 15px;
+    margin-top:18px;
 }
 
 /* On small screens, set height to 'auto' for sidenav and grid */
