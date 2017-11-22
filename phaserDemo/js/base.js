@@ -1,11 +1,4 @@
-﻿
-var GX = {
-};
-
-GX = {
-    //baseWidth: 1920,
-    //baseHeight: 1080,
-    //iconSize: 364,
+﻿var GX = {
     text1_1: "How do you want to pay for your medical expenses?",
     text1_2: "Pay a lot less out of my paycheck and more only when I actually need care.",
     text1_3: "Pay a lot more out of my paycheck and less when I receive care.",
@@ -27,6 +20,37 @@ GX = {
     text6_1: "Are you interested in access to a low-cost attorney?",
     text6_2: "Yes.",
     text6_3: "No.",
+    stageColor: "#eeeeee",
+    vframes: [
+        { viseme: "p", frame: 9 },
+        { viseme: "t", frame: 6 },
+        { viseme: "T", frame: 11 },
+        { viseme: "f", frame: 8 },
+        { viseme: "k", frame: 6 },
+        { viseme: "i", frame: 4 },
+        { viseme: "r", frame: 6 },
+        { viseme: "u", frame: 11 },
+        { viseme: "s", frame: 6 },
+        { viseme: "S", frame: 0 },
+        { viseme: "@", frame: 5 },
+        { viseme: "a", frame: 4 },
+        { viseme: "o", frame: 1 },
+        { viseme: "O", frame: 2 },
+        { viseme: "E", frame: 6 },
+        { viseme: "e", frame: 5 },
+        { viseme: "sil", frame: 10 },
+    ],
+    gestures: [
+        { gesture: "sway", frames: [0, 1, 2, 1, 0] },
+        { gesture: "idea", frames: [6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11, 10, 8, 7, 6] },
+        { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] }
+    ],
+     characterOffsetX: 0,
+     characterOffsetY: 130,
+     characterScaleX: .70,
+     characterScaleY: .70,
+     styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
+     styleAnswer: { font: "26px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
 };
 
 var vtype;
@@ -38,44 +62,6 @@ var eyes;
 var body;
 var ben;
 var clipduration;
-
-var style = { font: "16px Arial", fill: "#ff0044" };
-var stageColor = "#eeeeee";
-var mainState = "";
-
-var vframes = [
-    { viseme: "p", frame: 9 },
-    { viseme: "t", frame: 6 },
-    { viseme: "T", frame: 11 },
-    { viseme: "f", frame: 8 },
-    { viseme: "k", frame: 6 },
-    { viseme: "i", frame: 4 },
-    { viseme: "r", frame: 6 },
-    { viseme: "u", frame: 11 },
-    { viseme: "s", frame: 6 },
-    { viseme: "S", frame: 0 },
-    { viseme: "@", frame: 5 },
-    { viseme: "a", frame: 4 },
-    { viseme: "o", frame: 1 },
-    { viseme: "O", frame: 2 },
-    { viseme: "E", frame: 6 },
-    { viseme: "e", frame: 5 },
-    { viseme: "sil", frame: 10 },
-];
-
-var gestures = [
-    { gesture: "sway", frames: [0, 1, 2, 1, 0] },
-    { gesture: "idea", frames: [6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11, 10, 8, 7, 6] },
-    { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] }
-];
-
-var characterOffsetX = 0;
-var characterOffsetY = 130;
-var characterScaleX = .70;
-var characterScaleY = .70;
-
-var styleQuestion = { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 };
-var styleAnswer = { font: "26px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 600 };
 
 GX.bootState = function (game) { };
 GX.bootState.prototype = {
@@ -105,9 +91,9 @@ GX.question1State.prototype = {
     create: function () {
         var xOffset = 50;
         var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text1_1, styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text1_2, styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text1_3, styleAnswer);
+        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text1_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text1_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text1_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(up, this);
@@ -138,10 +124,10 @@ GX.question1State.prototype = {
         // set a ms threshold to discard lipsync frames with short durattion
         const viseme_threshold = 35;
 
-        game.stage.backgroundColor = stageColor;
-        heads = game.add.sprite(350 + characterOffsetX, 10 + characterOffsetY, 'heads')
-        eyes = game.add.sprite(455 + characterOffsetX, 95 + characterOffsetY, 'eyes');
-        body = game.add.sprite(99 + characterOffsetX, -45 + characterOffsetY, 'bodies');
+        game.stage.backgroundColor = GX.stageColor;
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -164,7 +150,7 @@ GX.question1State.prototype = {
                 vtime = gameJSON[key].time;
                 vvalue = gameJSON[key].value;
                 if (count > 0) {
-                    vframe = getByValue(vframes, vvalue, "viseme").frame;
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
                     // determine display duration
                     duration = vtime - prior_vtime;
                     // Only display frames with sufficient duration
@@ -194,10 +180,10 @@ GX.question1State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
-        addgesture(getByValue(gestures, "idea", "gesture"), 840, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "idea", "gesture"), 840, clipduration, 10);
 
         // Scale sprite group to 55%
-        ben.scale.setTo(characterScaleX, characterScaleY);
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
         console.log(timeline);
 
         // Start the show
@@ -242,11 +228,11 @@ GX.question2State.prototype = {
     create: function () {
         var xOffset = 50;
         var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text2_1, styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text2_2, styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text2_3, styleAnswer);
-        var text4 = game.add.text(game.world.centerX - xOffset2, 460, GX.text2_4, styleAnswer);
-        var text5 = game.add.text(game.world.centerX - xOffset2, 580, GX.text2_5, styleAnswer);
+        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text2_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text2_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text2_3, GX.styleAnswer);
+        var text4 = game.add.text(game.world.centerX - xOffset2, 460, GX.text2_4, GX.styleAnswer);
+        var text5 = game.add.text(game.world.centerX - xOffset2, 580, GX.text2_5, GX.styleAnswer);
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(up, this);
@@ -301,10 +287,10 @@ GX.question2State.prototype = {
         // set a ms threshold to discard lipsync frames with short durattion
         const viseme_threshold = 35;
 
-        game.stage.backgroundColor = stageColor;
-        heads = game.add.sprite(350 + characterOffsetX, 10 + characterOffsetY, 'heads')
-        eyes = game.add.sprite(455 + characterOffsetX, 95 + characterOffsetY, 'eyes');
-        body = game.add.sprite(99 + characterOffsetX, -45 + characterOffsetY, 'bodies');
+        game.stage.backgroundColor = GX.stageColor;
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -327,7 +313,7 @@ GX.question2State.prototype = {
                 vtime = gameJSON[key].time;
                 vvalue = gameJSON[key].value;
                 if (count > 0) {
-                    vframe = getByValue(vframes, vvalue, "viseme").frame;
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
                     // determine display duration
                     duration = vtime - prior_vtime;
                     // Only display frames with sufficient duration
@@ -357,10 +343,10 @@ GX.question2State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
-        addgesture(getByValue(gestures, "sway2", "gesture"), 500, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
 
         // Scale sprite group to 55%
-        ben.scale.setTo(characterScaleX, characterScaleY);
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
         console.log(timeline);
 
         // Start the show
@@ -406,9 +392,9 @@ GX.question3State.prototype = {
     create: function () {
         var xOffset = 50;
         var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text3_1, styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text3_2, styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text3_3, styleAnswer);
+        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text3_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text3_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text3_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(up, this);
@@ -463,10 +449,10 @@ GX.question3State.prototype = {
         // set a ms threshold to discard lipsync frames with short durattion
         const viseme_threshold = 35;
 
-        game.stage.backgroundColor = stageColor;
-        heads = game.add.sprite(350 + characterOffsetX, 10 + characterOffsetY, 'heads')
-        eyes = game.add.sprite(455 + characterOffsetX, 95 + characterOffsetY, 'eyes');
-        body = game.add.sprite(99 + characterOffsetX, -45 + characterOffsetY, 'bodies');
+        game.stage.backgroundColor = GX.stageColor;
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -489,7 +475,7 @@ GX.question3State.prototype = {
                 vtime = gameJSON[key].time;
                 vvalue = gameJSON[key].value;
                 if (count > 0) {
-                    vframe = getByValue(vframes, vvalue, "viseme").frame;
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
                     // determine display duration
                     duration = vtime - prior_vtime;
                     // Only display frames with sufficient duration
@@ -519,10 +505,10 @@ GX.question3State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
-        //addgesture(getByValue(gestures, "sway2", "gesture"), 500, clipduration, 10);
+        //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
 
         // Scale sprite group to 55%
-        ben.scale.setTo(characterScaleX, characterScaleY);
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
         console.log(timeline);
 
         // Start the show
@@ -568,10 +554,10 @@ GX.question4State.prototype = {
     create: function () {
         var xOffset = 50;
         var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text4_1, styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text4_2, styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text4_3, styleAnswer);
-        var text4 = game.add.text(game.world.centerX - xOffset2, 460, GX.text4_4, styleAnswer);
+        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text4_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text4_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text4_3, GX.styleAnswer);
+        var text4 = game.add.text(game.world.centerX - xOffset2, 460, GX.text4_4, GX.styleAnswer);
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(up, this);
@@ -626,10 +612,10 @@ GX.question4State.prototype = {
         // set a ms threshold to discard lipsync frames with short durattion
         const viseme_threshold = 35;
 
-        game.stage.backgroundColor = stageColor;
-        heads = game.add.sprite(350 + characterOffsetX, 10 + characterOffsetY, 'heads')
-        eyes = game.add.sprite(455 + characterOffsetX, 95 + characterOffsetY, 'eyes');
-        body = game.add.sprite(99 + characterOffsetX, -45 + characterOffsetY, 'bodies');
+        game.stage.backgroundColor = GX.stageColor;
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -652,7 +638,7 @@ GX.question4State.prototype = {
                 vtime = gameJSON[key].time;
                 vvalue = gameJSON[key].value;
                 if (count > 0) {
-                    vframe = getByValue(vframes, vvalue, "viseme").frame;
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
                     // determine display duration
                     duration = vtime - prior_vtime;
                     // Only display frames with sufficient duration
@@ -682,10 +668,10 @@ GX.question4State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
-        //addgesture(getByValue(gestures, "sway2", "gesture"), 500, clipduration, 10);
+        //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
 
         // Scale sprite group to 55%
-        ben.scale.setTo(characterScaleX, characterScaleY);
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
         console.log(timeline);
 
         // Start the show
@@ -731,9 +717,9 @@ GX.question5State.prototype = {
     create: function () {
         var xOffset = 50;
         var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text5_1, styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text5_2, styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text5_3, styleAnswer);
+        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text5_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text5_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text5_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(up, this);
@@ -788,10 +774,10 @@ GX.question5State.prototype = {
         // set a ms threshold to discard lipsync frames with short durattion
         const viseme_threshold = 35;
 
-        game.stage.backgroundColor = stageColor;
-        heads = game.add.sprite(350 + characterOffsetX, 10 + characterOffsetY, 'heads')
-        eyes = game.add.sprite(455 + characterOffsetX, 95 + characterOffsetY, 'eyes');
-        body = game.add.sprite(99 + characterOffsetX, -45 + characterOffsetY, 'bodies');
+        game.stage.backgroundColor = GX.stageColor;
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -814,7 +800,7 @@ GX.question5State.prototype = {
                 vtime = gameJSON[key].time;
                 vvalue = gameJSON[key].value;
                 if (count > 0) {
-                    vframe = getByValue(vframes, vvalue, "viseme").frame;
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
                     // determine display duration
                     duration = vtime - prior_vtime;
                     // Only display frames with sufficient duration
@@ -844,10 +830,10 @@ GX.question5State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
-        //addgesture(getByValue(gestures, "sway2", "gesture"), 500, clipduration, 10);
+        //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
 
         // Scale sprite group to 55%
-        ben.scale.setTo(characterScaleX, characterScaleY);
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
         console.log(timeline);
 
         // Start the show
@@ -893,9 +879,9 @@ GX.question6State.prototype = {
     create: function () {
         var xOffset = 50;
         var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text6_1, styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text6_2, styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text6_3, styleAnswer);
+        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text6_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text6_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text6_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(up, this);
@@ -927,10 +913,10 @@ GX.question6State.prototype = {
         // set a ms threshold to discard lipsync frames with short durattion
         const viseme_threshold = 35;
 
-        game.stage.backgroundColor = stageColor;
-        heads = game.add.sprite(350 + characterOffsetX, 10 + characterOffsetY, 'heads')
-        eyes = game.add.sprite(455 + characterOffsetX, 95 + characterOffsetY, 'eyes');
-        body = game.add.sprite(99 + characterOffsetX, -45 + characterOffsetY, 'bodies');
+        game.stage.backgroundColor = GX.stageColor;
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -953,7 +939,7 @@ GX.question6State.prototype = {
                 vtime = gameJSON[key].time;
                 vvalue = gameJSON[key].value;
                 if (count > 0) {
-                    vframe = getByValue(vframes, vvalue, "viseme").frame;
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
                     // determine display duration
                     duration = vtime - prior_vtime;
                     // Only display frames with sufficient duration
@@ -983,10 +969,10 @@ GX.question6State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
-        //addgesture(getByValue(gestures, "sway2", "gesture"), 500, clipduration, 10);
+        //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
 
         // Scale sprite group to 55%
-        ben.scale.setTo(characterScaleX, characterScaleY);
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
         console.log(timeline);
 
         // Start the show
