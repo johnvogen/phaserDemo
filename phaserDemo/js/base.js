@@ -45,12 +45,12 @@
         { gesture: "idea", frames: [6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11, 10, 8, 7, 6] },
         { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] }
     ],
-     characterOffsetX: 0,
-     characterOffsetY: 130,
-     characterScaleX: .70,
-     characterScaleY: .70,
-     styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
-     styleAnswer: { font: "26px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
+    characterOffsetX: 0,
+    characterOffsetY: 130,
+    characterScaleX: .70,
+    characterScaleY: .70,
+    styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
+    styleAnswer: { font: "26px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
 };
 
 var vtype;
@@ -79,11 +79,12 @@ GX.question1State.prototype = {
         //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     },
- 
+
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
         game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
         game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
     },
@@ -96,9 +97,9 @@ GX.question1State.prototype = {
         var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text1_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
-        text2.events.onInputUp.add(up, this);
+        text2.events.onInputUp.add(proceed);
         text3.inputEnabled = true;
-        text3.events.onInputUp.add(up, this);
+        text3.events.onInputUp.add(proceed);
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
         }, this);
@@ -128,6 +129,16 @@ GX.question1State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+
+        ctlPause = game.add.sprite(64, 0, 'controls');
+        ctlPause.frame = 3;
+        ctlPause.inputEnabled = true;
+        ctlPause.events.onInputUp.add(function () { game.paused = true; audiotrack.pause(); });
+
+        //ctlRestart = game.add.sprite(0, 0, 'controls');
+        //ctlRestart.frame = 0;
+        //ctlRestart.inputEnabled = true;
+        //ctlRestart.events.onInputUp.add(function () { game.paused = true; audiotrack.pause(); });
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -192,6 +203,9 @@ GX.question1State.prototype = {
         // Possibly blink eyes every 1/2 second
         timer.repeat(500, 20000, function () { blink(eyes); }, this);
         timer.start();
+
+        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
+
     },
 
     update: function () {
@@ -235,16 +249,13 @@ GX.question2State.prototype = {
         var text5 = game.add.text(game.world.centerX - xOffset2, 580, GX.text2_5, GX.styleAnswer);
 
         text2.inputEnabled = true;
-        text2.events.onInputUp.add(up, this);
+        text2.events.onInputUp.add(proceed, this);
         text3.inputEnabled = true;
-        text3.events.onInputUp.add(up, this);
+        text3.events.onInputUp.add(proceed, this);
         text4.inputEnabled = true;
-        text4.events.onInputUp.add(up, this);
+        text4.events.onInputUp.add(proceed, this);
         text5.inputEnabled = true;
-        text5.events.onInputUp.add(up, this);
-
-
-
+        text5.events.onInputUp.add(proceed, this);
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -273,8 +284,6 @@ GX.question2State.prototype = {
         text5.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
         }, this);
-
-
 
         var prior_vtime = 999;
         var duration = 0;
@@ -397,16 +406,9 @@ GX.question3State.prototype = {
         var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text3_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
-        text2.events.onInputUp.add(up, this);
+        text2.events.onInputUp.add(proceed, this);
         text3.inputEnabled = true;
-        text3.events.onInputUp.add(up, this);
-        //text4.inputEnabled = true;
-        //text4.events.onInputUp.add(up, this);
-        //text5.inputEnabled = true;
-        //text5.events.onInputUp.add(up, this);
-
-
-
+        text3.events.onInputUp.add(proceed, this);
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -421,22 +423,6 @@ GX.question3State.prototype = {
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
         }, this);
-
-        //text4.events.onInputOver.add(function () {
-        //    this.game.canvas.style.cursor = "pointer";
-        //}, this);
-        //text4.events.onInputOut.add(function () {
-        //    this.game.canvas.style.cursor = "default";
-        //}, this);
-
-        //text5.events.onInputOver.add(function () {
-        //    this.game.canvas.style.cursor = "pointer";
-        //}, this);
-        //text5.events.onInputOut.add(function () {
-        //    this.game.canvas.style.cursor = "default";
-        //}, this);
-
-
 
         var prior_vtime = 999;
         var duration = 0;
@@ -560,16 +546,11 @@ GX.question4State.prototype = {
         var text4 = game.add.text(game.world.centerX - xOffset2, 460, GX.text4_4, GX.styleAnswer);
 
         text2.inputEnabled = true;
-        text2.events.onInputUp.add(up, this);
+        text2.events.onInputUp.add(proceed, this);
         text3.inputEnabled = true;
-        text3.events.onInputUp.add(up, this);
+        text3.events.onInputUp.add(proceed, this);
         text4.inputEnabled = true;
-        text4.events.onInputUp.add(up, this);
-        //text5.inputEnabled = true;
-        //text5.events.onInputUp.add(up, this);
-
-
-
+        text4.events.onInputUp.add(proceed, this);
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -591,15 +572,6 @@ GX.question4State.prototype = {
         text4.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
         }, this);
-
-        //text5.events.onInputOver.add(function () {
-        //    this.game.canvas.style.cursor = "pointer";
-        //}, this);
-        //text5.events.onInputOut.add(function () {
-        //    this.game.canvas.style.cursor = "default";
-        //}, this);
-
-
 
         var prior_vtime = 999;
         var duration = 0;
@@ -722,16 +694,9 @@ GX.question5State.prototype = {
         var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text5_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
-        text2.events.onInputUp.add(up, this);
+        text2.events.onInputUp.add(proceed, this);
         text3.inputEnabled = true;
-        text3.events.onInputUp.add(up, this);
-        //text4.inputEnabled = true;
-        //text4.ev/ts.onInputUp.add(up, this);
-        //text5.inputEnabled = true;
-        //text5.events.onInputUp.add(up, this);
-
-
-
+        text3.events.onInputUp.add(proceed, this);
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -746,22 +711,6 @@ GX.question5State.prototype = {
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
         }, this);
-
-        //text4.events.onInputOver.add(function () {
-        //    this.game.canvas.style.cursor = "pointer";
-        //}, this);
-        //text4.events.onInputOut.add(function () {
-        //    this.game.canvas.style.cursor = "default";
-        //}, this);
-
-        //text5.events.onInputOver.add(function () {
-        //    this.game.canvas.style.cursor = "pointer";
-        //}, this);
-        //text5.events.onInputOut.add(function () {
-        //    this.game.canvas.style.cursor = "default";
-        //}, this);
-
-
 
         var prior_vtime = 999;
         var duration = 0;
@@ -884,9 +833,9 @@ GX.question6State.prototype = {
         var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text6_3, GX.styleAnswer);
 
         text2.inputEnabled = true;
-        text2.events.onInputUp.add(up, this);
+        text2.events.onInputUp.add(proceed, this);
         text3.inputEnabled = true;
-        text3.events.onInputUp.add(up, this);
+        text3.events.onInputUp.add(proceed, this);
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -1006,7 +955,7 @@ function getByValue(arr, value, mykey) {
     }
 }
 
-function up(item) {
+function proceed(item) {
     audiotrack.destroy();
     if (game.state.current == "question1") {
         game.state.start('question2');
@@ -1020,7 +969,7 @@ function up(item) {
         game.state.start('question6');
     } else if (game.state.current == "question6") {
         alert("End of questions");
-    } 
+    }
 }
 
 function addgesture(obj, position, clipduration, rep) {
