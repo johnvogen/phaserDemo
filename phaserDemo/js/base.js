@@ -46,8 +46,7 @@
         { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] }
     ],
     characterOffsetX: 0,
-    //characterOffsetY: 130,
-    characterOffsetY: -300,
+    characterOffsetY: 130,
     characterScaleX: .70,
     characterScaleY: .70,
     styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
@@ -63,9 +62,6 @@ var eyes;
 var body;
 var ben;
 var clipduration;
-var platforms;
-var ledge;
-
 
 GX.bootState = function (game) { };
 GX.bootState.prototype = {
@@ -91,20 +87,9 @@ GX.question1State.prototype = {
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
         game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
         game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
-
-        game.load.image('ground', 'png/platform.png');
     },
 
     create: function () {
-
-
-        platforms = game.add.group();
-        platforms.enableBody = true;
-        ledge = platforms.create(200, 400, 'ground');
-        ledge.body.immovable = true;
-
-
-
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text1_1, GX.styleQuestion);
@@ -115,18 +100,12 @@ GX.question1State.prototype = {
         text2.events.onInputUp.add(proceed);
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
-
-
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
         }, this);
         text2.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
         }, this);
-
-
-
-
 
         text3.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -147,30 +126,9 @@ GX.question1State.prototype = {
         const viseme_threshold = 35;
 
         game.stage.backgroundColor = GX.stageColor;
-        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads');
-        game.physics.arcade.enable(heads);
-        heads.enableBody = true;
-        heads.body.bounce.y = 0.2;
-        heads.body.gravity.y = 300;
-        heads.body.collideWorldBounds = true;
-
-
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
-        game.physics.arcade.enable(eyes);
-        eyes.enableBody = true;
-        eyes.body.bounce.y = 0.2;
-        eyes.body.gravity.y = 300;
-        eyes.body.collideWorldBounds = true;
-
-
-
-
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
-        game.physics.arcade.enable(body);
-        body.enableBody = true;
-        body.body.bounce.y = 0.2;
-        body.body.gravity.y = 300;
-        body.body.collideWorldBounds = true;
 
         ctlPause = game.add.sprite(64, 0, 'controls');
         ctlPause.frame = 3;
@@ -184,33 +142,10 @@ GX.question1State.prototype = {
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
-
-
-
-
         ben = game.add.group();
-        //game.physics.arcade.enable(ben);
-        ben.enableBody = true;
-        eyes.body.collideWorldBounds = true;
-        //heads = ben.create(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads');
-        //heads.body.gravity.y = 300;
-        //heads.body.bounce.y = 0.7;
-
-
-        //eyes = ben.create(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
-        //eyes.body.gravity.y = 300;
-        //eyes.body.bounce.y = 0.7;
-
-        //body = ben.create(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
-        //body.body.gravity.y = 300;
-        //body.body.bounce.y = 0.7;
-
-
         ben.add(heads);
         ben.add(eyes);
         ben.add(body);
-
-       
 
         // Set a default head postion for initial postion and after lip sync
         heads.frame = default_head;
@@ -274,8 +209,6 @@ GX.question1State.prototype = {
     },
 
     update: function () {
-
-
         var tick = Math.round(audiotrack.currentTime / 10);
         if (tick <= clipduration) {
             heads.frame = timeline[tick].head;
