@@ -1277,7 +1277,7 @@ function proceed(item) {
     } else if (game.state.current == "question5") {
         game.state.start('question6');
     } else if (game.state.current == "question6") {
-        alert("End of questions");
+        alert("Display Results");
     }
 }
 
