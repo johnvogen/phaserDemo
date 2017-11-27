@@ -20,7 +20,7 @@
     text6_1: "Are you interested in access to a low-cost attorney?",
     text6_2: "Yes.",
     text6_3: "No.",
-    stageColor: "#eeeeee",
+    stageColor: "#ffffff",
     vframes: [
         { viseme: "p", frame: 9 },
         { viseme: "t", frame: 6 },
@@ -43,12 +43,15 @@
     gestures: [
         { gesture: "sway", frames: [0, 1, 2, 1, 0] },
         { gesture: "idea", frames: [6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11, 10, 8, 7, 6] },
-        { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] }
+        { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] },
+        { gesture: "waving", frames: [9, 14, 17, 20, 17, 14, 9] },
     ],
     characterOffsetX: 0,
     characterOffsetY: 130,
     characterScaleX: .70,
     characterScaleY: .70,
+    controlScaleX: 1,
+    controlScaleY: 1,
     styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
     styleAnswer: { font: "26px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
 };
@@ -68,7 +71,243 @@ GX.bootState.prototype = {
 
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.state.start('question1');
+        game.state.start('intro');
+    }
+}
+
+
+GX.introState = function (game) { };
+GX.introState.prototype = {
+
+    init: function () {
+        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    },
+
+    preload: function () {
+
+        game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
+        game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
+        game.load.spritesheet('bodies', 'png/bodies_noshadow.png', 803, 832, 21);
+
+        game.load.spritesheet('shadow', 'png/shadow.png', 138, 15);
+        game.load.spritesheet('direct', 'png/direct.png', 88, 98);
+        game.load.spritesheet('sketch', 'png/sketch.png', 98, 108);
+
+        game.load.json('viseme', 'data/oh_hi.json');
+        game.load.audio('intro', 'mp3/oh_hi.mp3');
+    },
+
+
+    create: function () {
+        title = game.add.group();
+        titledirect = game.add.group();
+        titlesketch = game.add.group();
+        var direct;
+        var shadow;
+        var tween;
+
+        var prior_vtime = 999;
+        var duration = 0;
+        var count = 0;
+        const default_head = 10;
+        var prior_vframe = default_head;
+        var i = 0;
+
+        // It's visually distracting when the lip frames change too quickly.
+        // set a ms threshold to discard lipsync frames with short durattion
+        const viseme_threshold = 0;
+
+        heads = game.add.sprite(2650 + 465, -790, 'heads')
+        eyes = game.add.sprite(2755 + 465, -705, 'eyes');
+        body = game.add.sprite(2399 + 465, -845, 'bodies');
+        heads.frame = default_head;
+
+        ben = game.add.group();
+        ben.add(heads);
+        ben.add(eyes);
+        ben.add(body);
+        ben.scale.setTo(.23, .23);
+
+        // Sets background color to white.
+        game.stage.backgroundColor = GX.stageColor;
+        this.game.scale.pageAlignHorizontally = true;
+        this.game.scale.pageAlignVertically = true;
+        this.game.scale.refresh();
+
+        audiotrack = game.add.audio('intro');
+        timer = game.time.create(false);
+
+        var gameJSON = game.cache.getJSON('viseme');
+        for (var key in gameJSON) {
+            if (gameJSON.hasOwnProperty(key)) {
+                vtype = gameJSON[key].type;
+                vtime = gameJSON[key].time;
+                vvalue = gameJSON[key].value;
+                if (count > 0) {
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
+                    // determine display duration
+                    duration = vtime - prior_vtime;
+                    // Only display frames with sufficient duration
+                    if (duration > viseme_threshold) {
+                        for (i = i; i < Math.round(vtime / 10); i++) {
+                            timeline[i] = { "head": prior_vframe };
+                        }
+                        timeline[i] = { "head": vframe };
+                    }
+                    prior_vtime = vtime;
+                    prior_vframe = vframe;
+                }
+            }
+            count++;
+        }
+
+        // Add .20 second of default head position.. This helps account for missed ticks and timing differences between
+        // phaser vs. audio file timing 
+
+        var extension = i + 50;
+        for (i = i + 1; i <= extension; i++) {
+            timeline[i] = { "head": default_head };
+        }
+        clipduration = i;
+        // Ends Lipsyncing / clip setup 
+
+        // Start body setup.. default to body 0
+        for (i = 0; i < clipduration; i++) {
+            { timeline[i].body = 0; }
+        }
+
+        //console.log(timeline);
+        addgesture(getByValue(GX.gestures, "waving", "gesture"), 50, clipduration, 13);  // Start pointing at .10 seconds
+
+
+        for (var i = 0; i < 6; i++) {
+            // Add a shadow to the location which characters will land on.
+            // And tween their size to make them look like a real shadow.
+            // Put the following code before items to give shadow a lower
+            // render order.
+            shadow = game.add.sprite(400 + 88 * i, 290, 'shadow');
+
+            // Set shadow's size 0 so that it'll be invisible at the beginning.
+            shadow.scale.setTo(0.0, 0.0);
+
+            // Also set the origin to the center since we don't want to
+            // see the shadow scale to the left top.
+            shadow.anchor.setTo(0.5, 1);
+            game.add.tween(shadow.scale).to({ x: 1.0, y: 1.0 }, 2400, Phaser.Easing.Bounce.Out, true);
+            title.add(shadow);
+
+            // Add characters on top of shadows.
+            direct = game.add.sprite(400 + 87 * i, -40, 'direct', i);
+
+            // Set origin to the center to make the rotation look better.
+            direct.anchor.setTo(0.5, 0.5);
+
+            // Add direct to title group
+            title.add(direct);
+
+            // Add a simple bounce tween to each character's position.
+            tween = game.add.tween(direct).to({ y: 245 }, 2400, Phaser.Easing.Bounce.Out, true);
+
+            //---
+            sketch = game.add.sprite(400 + 87 * i, 1000, 'sketch', i);
+            sketch.anchor.setTo(.5, .5);
+            title.add(sketch);
+
+            // Add a simple bounce tween to each character's position.
+            game.add.tween(sketch).to({ y: 350 }, 3400, Phaser.Easing.Bounce.Out, true, 400 * i, 0);
+
+            // Add another rotation tween to the same character.
+            var oddeven = (Math.floor(Math.random() * 2) + 1);
+            var rotation = 720;
+            if (oddeven == 1)
+            { rotation = -720; }
+            game.add.tween(sketch).to({ angle: rotation }, Math.floor(Math.random() * 3300) + 900 - i * 500, Phaser.Easing.Cubic.In, true, 1000 + 400 * i, 0);
+        }
+
+        // End Text Sequence
+        game.world.bringToTop(title);
+        timer = game.time.create(false);
+        timer.add(5500, function () {
+            // Possibly blink eyes every 1/2 second
+            timer.repeat(500, 20000, function () { blink(eyes); }, this);
+            tween = game.add.tween(ben).to({ y: 219, }, 1200, Phaser.Easing.Bounce.Out, true, 1000);
+        }, this);
+
+        timer.add(11700, function () {
+            tween = game.add.tween(title).to({ x: -250 }, 400, Phaser.Easing.Cubic.Out, true, 300);
+        }, this);
+
+        timer.add(12000, function () {
+            tween = game.add.tween(ben).to({ y: 1000 }, 400, Phaser.Easing.Cubic.Out, true, 400);
+        }, this);
+
+        // Character raises arms and looks down ready for fall.
+        timer.add(12300, function () {
+            body.frame = 16;
+            heads.frame = 1;
+            eyes.frame = 2;
+        }, this);
+
+        timer.add(13000, function () {
+            tween = game.add.tween(title).to({ x: 0 }, 400, Phaser.Easing.Cubic.Out, true, 200);
+        }, this);
+
+        timer.add(8000, function () {
+            audiotrack.play();
+        }, this);
+
+        timer.add(13400, function () {
+            tween = game.add.tween(title.scale).to({ x: 1.5, y: 1.5 }, 800, Phaser.Easing.Linear.None, true, 200);
+            tween = game.add.tween(title.position).to({ x: (title.position.x - title.width) / 2, y: (title.position.y - title.height) / 2 }, 800, Phaser.Easing.Linear.None, true, 200);
+        }, this);
+
+        timer.add(15500, function () {
+            tween = game.add.tween(title).to({ x: 3000 }, 1000, Phaser.Easing.Cubic.Out, true, 200);
+        }, this);
+
+        timer.start();
+
+    },
+
+    update: function () {
+        var tick = Math.round(audiotrack.currentTime / 10);
+        if (tick <= clipduration) {
+            heads.frame = timeline[tick].head;
+        }
+        if (tick < 145) {
+            body.frame = timeline[tick].body;
+        }
+        if (timer.ms >= 17000) {
+
+            //this.music.stop();
+            //this.camera.fade('#000000');
+            //this.camera.onFadeComplete.add(this.proceed, this);
+
+
+
+            //this.music.stop();
+            //this.camera.fade('#000000');
+            //this.camera.onFadeComplete.add(this.fadeComplete, this);
+        
+    
+        
+
+
+
+            proceed();
+        }
+    },
+
+    fadeComplete: function () {
+        proceed();
+    },
+
+    render: function () {
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 }
 
@@ -90,6 +329,9 @@ GX.question1State.prototype = {
     },
 
     create: function () {
+
+
+        //game.world.alpha = 0;
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text1_1, GX.styleQuestion);
@@ -130,10 +372,13 @@ GX.question1State.prototype = {
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
-        ctlPause = game.add.sprite(64, 0, 'controls');
+        ctlPause = game.add.sprite(64, 20, 'controls');
         ctlPause.frame = 3;
         ctlPause.inputEnabled = true;
-        ctlPause.events.onInputUp.add(function () { game.paused = true; audiotrack.pause(); });
+        ctlPause.events.onInputUp.add(function () {
+            game.paused = true; audiotrack.pause();
+        });
+        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
         //ctlRestart = game.add.sprite(0, 0, 'controls');
         //ctlRestart.frame = 0;
@@ -204,6 +449,8 @@ GX.question1State.prototype = {
         timer.repeat(500, 20000, function () { blink(eyes); }, this);
         timer.start();
 
+        //game.add.tween(game.world).to({ alpha: 1 }, 1000, "Linear", true);
+
         game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
 
     },
@@ -235,6 +482,8 @@ GX.question2State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+
         game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
         game.load.audio('intro', 'mp3/567956bb-ff6a-4601-bae8-b16e147411ae.mp3');
     },
@@ -301,6 +550,14 @@ GX.question2State.prototype = {
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
+        ctlPause = game.add.sprite(64, 20, 'controls');
+        ctlPause.frame = 3;
+        ctlPause.inputEnabled = true;
+        ctlPause.events.onInputUp.add(function () {
+            game.paused = true; audiotrack.pause();
+        });
+        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
         ben = game.add.group();
@@ -364,6 +621,8 @@ GX.question2State.prototype = {
         // Possibly blink eyes every 1/2 second
         timer.repeat(500, 20000, function () { blink(eyes); }, this);
         timer.start();
+
+        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
     },
 
     update: function () {
@@ -394,6 +653,8 @@ GX.question3State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+
         game.load.json('viseme', 'data/c93264be-bb36-4443-b294-19dafca8bdbb.json');
         game.load.audio('intro', 'mp3/c93264be-bb36-4443-b294-19dafca8bdbb.mp3');
     },
@@ -439,6 +700,14 @@ GX.question3State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+
+        ctlPause = game.add.sprite(64, 20, 'controls');
+        ctlPause.frame = 3;
+        ctlPause.inputEnabled = true;
+        ctlPause.events.onInputUp.add(function () {
+            game.paused = true; audiotrack.pause();
+        });
+        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -503,6 +772,8 @@ GX.question3State.prototype = {
         // Possibly blink eyes every 1/2 second
         timer.repeat(500, 20000, function () { blink(eyes); }, this);
         timer.start();
+
+        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
     },
 
     update: function () {
@@ -533,6 +804,8 @@ GX.question4State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+
         game.load.json('viseme', 'data/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.json');
         game.load.audio('intro', 'mp3/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.mp3');
     },
@@ -589,6 +862,14 @@ GX.question4State.prototype = {
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
+        ctlPause = game.add.sprite(64, 20, 'controls');
+        ctlPause.frame = 3;
+        ctlPause.inputEnabled = true;
+        ctlPause.events.onInputUp.add(function () {
+            game.paused = true; audiotrack.pause();
+        });
+        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
         ben = game.add.group();
@@ -652,6 +933,8 @@ GX.question4State.prototype = {
         // Possibly blink eyes every 1/2 second
         timer.repeat(500, 20000, function () { blink(eyes); }, this);
         timer.start();
+
+        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
     },
 
     update: function () {
@@ -682,6 +965,8 @@ GX.question5State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+
         game.load.json('viseme', 'data/828a49af-eae5-4f82-9279-a7bbb51d2f01.json');
         game.load.audio('intro', 'mp3/828a49af-eae5-4f82-9279-a7bbb51d2f01.mp3');
     },
@@ -728,6 +1013,14 @@ GX.question5State.prototype = {
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
+        ctlPause = game.add.sprite(64, 20, 'controls');
+        ctlPause.frame = 3;
+        ctlPause.inputEnabled = true;
+        ctlPause.events.onInputUp.add(function () {
+            game.paused = true; audiotrack.pause();
+        });
+        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
         ben = game.add.group();
@@ -791,6 +1084,8 @@ GX.question5State.prototype = {
         // Possibly blink eyes every 1/2 second
         timer.repeat(500, 20000, function () { blink(eyes); }, this);
         timer.start();
+
+        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
     },
 
     update: function () {
@@ -821,6 +1116,8 @@ GX.question6State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+
         game.load.json('viseme', 'data/9331fbbc-d5b0-48ae-9705-334273bb50c5.json');
         game.load.audio('intro', 'mp3/9331fbbc-d5b0-48ae-9705-334273bb50c5.mp3');
     },
@@ -867,6 +1164,14 @@ GX.question6State.prototype = {
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
+        ctlPause = game.add.sprite(64, 20, 'controls');
+        ctlPause.frame = 3;
+        ctlPause.inputEnabled = true;
+        ctlPause.events.onInputUp.add(function () {
+            game.paused = true; audiotrack.pause();
+        });
+        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
         ben = game.add.group();
@@ -930,6 +1235,8 @@ GX.question6State.prototype = {
         // Possibly blink eyes every 1/2 second
         timer.repeat(500, 20000, function () { blink(eyes); }, this);
         timer.start();
+
+        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
     },
 
     update: function () {
@@ -957,7 +1264,9 @@ function getByValue(arr, value, mykey) {
 
 function proceed(item) {
     audiotrack.destroy();
-    if (game.state.current == "question1") {
+    if (game.state.current == "intro") {
+        game.state.start('question1');
+    } else if (game.state.current == "question1") {
         game.state.start('question2');
     } else if (game.state.current == "question2") {
         game.state.start('question3');
@@ -988,13 +1297,14 @@ function blink(sprite) {
     if (frame < 10)
     { sprite.frame = frame; }
     // Else, display the default frame. Frame 1.
-    else { sprite.frame = 1; }
+    else { sprite.frame = 1; } //this is slightly changed in bounce state - see if it makes a difference
 }
 
 var game;
 window.onload = function () {
     game = new Phaser.Game(1280, 720, Phaser.AUTO, 'gameDiv');
     game.state.add('boot', GX.bootState);
+    game.state.add('intro', GX.introState);
     game.state.add('question1', GX.question1State);
     game.state.add('question2', GX.question2State);
     game.state.add('question3', GX.question3State);
