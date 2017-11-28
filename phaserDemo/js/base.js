@@ -54,6 +54,18 @@
     controlScaleY: 1,
     styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
     styleAnswer: { font: "26px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
+    q1DataUrl: "https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json",
+    q1mp3Url: "https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3",
+    q2DataUrl: "https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json",
+    q2mp3Url: "https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ",
+    q3DataUrl: "https://s3.amazonaws.com/audioposts27/c93264be-bb36-4443-b294-19dafca8bdbb.json",
+    q3mp3Url: "https://s3.amazonaws.com/audioposts27/c93264be-bb36-4443-b294-19dafca8bdbb.mp3 ",
+    q4DataUrl: "https://s3.amazonaws.com/audioposts27/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.json",
+    q4mp3Url: "https://s3.amazonaws.com/audioposts27/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.mp3",
+    q5DataUrl: "https://s3.amazonaws.com/audioposts27/828a49af-eae5-4f82-9279-a7bbb51d2f01.json",
+    q5mp3Url: "https://s3.amazonaws.com/audioposts27/828a49af-eae5-4f82-9279-a7bbb51d2f01.mp3",
+    q6DataUrl: "https://s3.amazonaws.com/audioposts27/9331fbbc-d5b0-48ae-9705-334273bb50c5.json",
+    q6mp3Url: "https://s3.amazonaws.com/audioposts27/9331fbbc-d5b0-48ae-9705-334273bb50c5.json"
 };
 
 var vtype;
@@ -324,8 +336,8 @@ GX.question1State.prototype = {
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
-        game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
-        game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
+        game.load.json('viseme', GX.q1DataUrl);
+        game.load.audio('intro', GX.q1mp3Url);
     },
 
     create: function () {
@@ -483,9 +495,8 @@ GX.question2State.prototype = {
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
-
-        game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
-        game.load.audio('intro', 'mp3/567956bb-ff6a-4601-bae8-b16e147411ae.mp3');
+        game.load.json('viseme', GX.q2DataUrl);
+        game.load.audio('intro', GX.q2mp3Url);
     },
 
     create: function () {
@@ -654,9 +665,8 @@ GX.question3State.prototype = {
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
-
-        game.load.json('viseme', 'data/c93264be-bb36-4443-b294-19dafca8bdbb.json');
-        game.load.audio('intro', 'mp3/c93264be-bb36-4443-b294-19dafca8bdbb.mp3');
+        game.load.json('viseme', GX.q3DataUrl);
+        game.load.audio('intro', GX.q3mp3Url);
     },
 
     create: function () {
@@ -805,9 +815,8 @@ GX.question4State.prototype = {
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
-
-        game.load.json('viseme', 'data/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.json');
-        game.load.audio('intro', 'mp3/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.mp3');
+        game.load.json('viseme', GX.q4DataUrl);
+        game.load.audio('intro', GX.q4mp3Url);
     },
 
     create: function () {
@@ -966,9 +975,8 @@ GX.question5State.prototype = {
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
-
-        game.load.json('viseme', 'data/828a49af-eae5-4f82-9279-a7bbb51d2f01.json');
-        game.load.audio('intro', 'mp3/828a49af-eae5-4f82-9279-a7bbb51d2f01.mp3');
+        game.load.json('viseme', GX.q5DataUrl);
+        game.load.audio('intro', GX.q5mp3Url);
     },
 
     create: function () {
@@ -1117,9 +1125,8 @@ GX.question6State.prototype = {
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
-
-        game.load.json('viseme', 'data/9331fbbc-d5b0-48ae-9705-334273bb50c5.json');
-        game.load.audio('intro', 'mp3/9331fbbc-d5b0-48ae-9705-334273bb50c5.mp3');
+        game.load.json('viseme', GX.q6DataUrl);
+        game.load.audio('intro', GX.q6mp3Url);
     },
 
     create: function () {
