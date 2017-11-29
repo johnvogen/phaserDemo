@@ -40,11 +40,31 @@
         { viseme: "e", frame: 5 },
         { viseme: "sil", frame: 10 },
     ],
+    //gestures: [
+    //    { gesture: "sway", frames: [0, 1, 2, 1, 0] },
+    //    { gesture: "idea", frames: [6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11, 10, 8, 7, 6] },
+    //    { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] },
+    //    { gesture: "waving", frames: [9, 14, 17, 20, 17, 14, 9] },
+    //],
     gestures: [
-        { gesture: "sway", frames: [0, 1, 2, 1, 0] },
-        { gesture: "idea", frames: [6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11, 10, 8, 7, 6] },
-        { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] },
-        { gesture: "waving", frames: [9, 14, 17, 20, 17, 14, 9] },
+        { gesture: "fistpump", frames: [18, 19, 20, 21, 21, 21, 21, 21, 20, 19, 18] },
+        { gesture: "waiting", frames: [44, 45, 46, 47, 48, 49, 50, 51, 50, 49, 48, 47, 46, 45, 44, 45, 46, 47, 48, 49, 50, 51, 50, 49, 48, 47, 46, 45, 44] },
+        { gesture: "idea", frames: [1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2, 1] },
+        { gesture: "present1", frames: [41] },
+        { gesture: "present2", frames: [42] },
+        { gesture: "armcross", frames: [43] },
+        { gesture: "heartfelt", frames: [22] },
+        { gesture: "armraise1", frames: [23] },
+        { gesture: "armraise2", frames: [24] },
+        { gesture: "please", frames: [25] },
+        { gesture: "armsup", frames: [27] },
+        { gesture: "armsout", frames: [26] },
+        { gesture: "armswayout", frames: [31] },
+        { gesture: "hand_east", frames: [29] },
+        { gesture: "hand_west", frames: [30] },
+        { gesture: "point_east", frames: [6, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 7, 6] },
+        { gesture: "walk", frames: [32, 33, 34, 35, 36, 37, 38, 39, 40, 32, 33, 34, 35, 36, 37, 38, 39, 40] },
+        { gesture: "wave", frames: [11, 12, 13, 14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15, 14, 13, 12, 11] }
     ],
     characterOffsetX: 0,
     characterOffsetY: 130,
@@ -55,6 +75,9 @@
     //styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
     styleQuestion: { font: "32px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
     styleAnswer: { font: "28px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
+    styleAnswerOver: { font: "28px Boogaloo", fill: "#ed1c24", wordWrap: true, wordWrapWidth: 600 },
+    styleAnswerOut: { font: "28px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 }
+
 };
 
 var vtype;
@@ -179,7 +202,7 @@ GX.introState.prototype = {
         }
 
         //console.log(timeline);
-        addgesture(getByValue(GX.gestures, "waving", "gesture"), 50, clipduration, 13);  // Start pointing at .10 seconds
+        //addgesture(getByValue(GX.gestures, "waving", "gesture"), 50, clipduration, 13);  // Start pointing at .10 seconds
 
 
         for (var i = 0; i < 6; i++) {
@@ -315,14 +338,14 @@ GX.introState.prototype = {
 GX.question1State = function (game) { };
 GX.question1State.prototype = {
 
-    
+
 
 
 
     init: function () {
         //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        
+
     },
 
     preload: function () {
@@ -332,7 +355,9 @@ GX.question1State.prototype = {
 
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
+
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
         game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
@@ -355,18 +380,25 @@ GX.question1State.prototype = {
         text2.events.onInputUp.add(proceed);
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
+
         text2.events.onInputOver.add(function () {
+            console.log("Hover over");
             this.game.canvas.style.cursor = "pointer";
+            text2.setStyle(GX.styleAnswerOver);
+
         }, this);
         text2.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text2.setStyle(GX.styleAnswerOut);
         }, this);
 
         text3.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text3.setStyle(GX.styleAnswerOver);
         }, this);
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text3.setStyle(GX.styleAnswerOut);
         }, this);
 
         var prior_vtime = 999;
@@ -384,6 +416,7 @@ GX.question1State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+        body.scale.setTo(2, 2);
 
         ctlPause = game.add.sprite(64, 20, 'controls');
         ctlPause.frame = 3;
@@ -498,7 +531,8 @@ GX.question2State.prototype = {
 
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
         game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
@@ -528,30 +562,38 @@ GX.question2State.prototype = {
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text2.setStyle(GX.styleAnswerOver);
         }, this);
         text2.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text2.setStyle(GX.styleAnswerOut);
         }, this);
 
         text3.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text3.setStyle(GX.styleAnswerOver);
         }, this);
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text3.setStyle(GX.styleAnswerOut);
         }, this);
 
         text4.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text4.setStyle(GX.styleAnswerOver);
         }, this);
         text4.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text4.setStyle(GX.styleAnswerOut);
         }, this);
 
         text5.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text5.setStyle(GX.styleAnswerOver);
         }, this);
         text5.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text5.setStyle(GX.styleAnswerOut);
         }, this);
 
         var prior_vtime = 999;
@@ -569,6 +611,7 @@ GX.question2State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+        body.scale.setTo(2, 2);
 
         ctlPause = game.add.sprite(64, 20, 'controls');
         ctlPause.frame = 3;
@@ -629,7 +672,9 @@ GX.question2State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
-        addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
+
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 900, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"),1100, clipduration, 300);
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
@@ -672,7 +717,8 @@ GX.question3State.prototype = {
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
         game.load.json('viseme', 'data/c93264be-bb36-4443-b294-19dafca8bdbb.json');
@@ -695,16 +741,20 @@ GX.question3State.prototype = {
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text2.setStyle(GX.styleAnswerOver);
         }, this);
         text2.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text2.setStyle(GX.styleAnswerOut);
         }, this);
 
         text3.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text3.setStyle(GX.styleAnswerOver);
         }, this);
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text3.setStyle(GX.styleAnswerOut);
         }, this);
 
         var prior_vtime = 999;
@@ -722,6 +772,7 @@ GX.question3State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+        body.scale.setTo(2, 2);
 
         ctlPause = game.add.sprite(64, 20, 'controls');
         ctlPause.frame = 3;
@@ -825,7 +876,8 @@ GX.question4State.prototype = {
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
         game.load.json('viseme', 'data/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.json');
@@ -851,23 +903,29 @@ GX.question4State.prototype = {
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text2.setStyle(GX.styleAnswerOver);
         }, this);
         text2.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text2.setStyle(GX.styleAnswerOut);
         }, this);
 
         text3.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text3.setStyle(GX.styleAnswerOver);
         }, this);
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text3.setStyle(GX.styleAnswerOut);
         }, this);
 
         text4.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text4.setStyle(GX.styleAnswerOver);
         }, this);
         text4.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text4.setStyle(GX.styleAnswerOut);
         }, this);
 
         var prior_vtime = 999;
@@ -885,6 +943,7 @@ GX.question4State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+        body.scale.setTo(2, 2);
 
         ctlPause = game.add.sprite(64, 20, 'controls');
         ctlPause.frame = 3;
@@ -988,7 +1047,8 @@ GX.question5State.prototype = {
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
         game.load.json('viseme', 'data/828a49af-eae5-4f82-9279-a7bbb51d2f01.json');
@@ -1011,16 +1071,20 @@ GX.question5State.prototype = {
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text2.setStyle(GX.styleAnswerOver);
         }, this);
         text2.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text2.setStyle(GX.styleAnswerOut);
         }, this);
 
         text3.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text3.setStyle(GX.styleAnswerOver);
         }, this);
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text3.setStyle(GX.styleAnswerOut);
         }, this);
 
         var prior_vtime = 999;
@@ -1038,6 +1102,7 @@ GX.question5State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+        body.scale.setTo(2, 2);
 
         ctlPause = game.add.sprite(64, 20, 'controls');
         ctlPause.frame = 3;
@@ -1141,7 +1206,8 @@ GX.question6State.prototype = {
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
+        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
         game.load.json('viseme', 'data/9331fbbc-d5b0-48ae-9705-334273bb50c5.json');
@@ -1164,16 +1230,20 @@ GX.question6State.prototype = {
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text2.setStyle(GX.styleAnswerOver);
         }, this);
         text2.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text2.setStyle(GX.styleAnswerOut);
         }, this);
 
         text3.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
+            text3.setStyle(GX.styleAnswerOver);
         }, this);
         text3.events.onInputOut.add(function () {
             this.game.canvas.style.cursor = "default";
+            text3.setStyle(GX.styleAnswerOut);
         }, this);
 
         var prior_vtime = 999;
@@ -1191,6 +1261,7 @@ GX.question6State.prototype = {
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+        body.scale.setTo(2, 2);
 
         ctlPause = game.add.sprite(64, 20, 'controls');
         ctlPause.frame = 3;
@@ -1345,9 +1416,9 @@ window.onload = function () {
 
     function createText() {
         //if (game.state.current == "question1") {
-            
+
         //} else if (game.state.current == "question2") {
-            
+
         //}    
     }
 
