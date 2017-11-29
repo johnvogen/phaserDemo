@@ -76,7 +76,6 @@ GX.bootState.prototype = {
     }
 }
 
-
 GX.introState = function (game) { };
 GX.introState.prototype = {
 
@@ -1333,7 +1332,6 @@ var game;
 window.onload = function () {
     game = new Phaser.Game(1280, 720, Phaser.AUTO, 'gameDiv');
 
-
     WebFontConfig = {
         //  'active' means all requested fonts have finished loading
         //  We set a 1 second delay before calling 'createText'.
@@ -1341,7 +1339,7 @@ window.onload = function () {
         active: function () { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
         //  The Google Fonts we want to load (specify as many as you like in the array)
         google: {
-            families: ['Revalia', 'Shadows Into Light', 'Boogaloo', 'Caveat']
+            families: ['Boogaloo', 'Caveat']
         }
     };
 
@@ -1350,10 +1348,8 @@ window.onload = function () {
             
         //} else if (game.state.current == "question2") {
             
-        //}
-        
+        //}    
     }
-
 
     game.state.add('boot', GX.bootState);
     game.state.add('intro', GX.introState);
@@ -1363,5 +1359,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('question1');
+    game.state.start('boot');
 };
