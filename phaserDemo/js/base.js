@@ -52,8 +52,9 @@
     characterScaleY: .70,
     controlScaleX: 1,
     controlScaleY: 1,
-    styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
-    styleAnswer: { font: "26px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
+    //styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
+    styleQuestion: { font: "32px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
+    styleAnswer: { font: "28px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
 };
 
 var vtype;
@@ -290,9 +291,9 @@ GX.introState.prototype = {
             //this.music.stop();
             //this.camera.fade('#000000');
             //this.camera.onFadeComplete.add(this.fadeComplete, this);
-        
-    
-        
+
+
+
 
 
 
@@ -315,12 +316,21 @@ GX.introState.prototype = {
 GX.question1State = function (game) { };
 GX.question1State.prototype = {
 
+    
+
+
+
     init: function () {
         //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        
     },
 
     preload: function () {
+
+        game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
+
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
@@ -328,7 +338,7 @@ GX.question1State.prototype = {
 
         //game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
         //game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
-        game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');     
+        game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
         game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
     },
 
@@ -483,6 +493,10 @@ GX.question2State.prototype = {
     },
 
     preload: function () {
+
+        game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
+
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
@@ -493,6 +507,7 @@ GX.question2State.prototype = {
         game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json');
         game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ');
     },
+
 
     create: function () {
         var xOffset = 50;
@@ -1317,6 +1332,29 @@ function blink(sprite) {
 var game;
 window.onload = function () {
     game = new Phaser.Game(1280, 720, Phaser.AUTO, 'gameDiv');
+
+
+    WebFontConfig = {
+        //  'active' means all requested fonts have finished loading
+        //  We set a 1 second delay before calling 'createText'.
+        //  For some reason if we don't the browser cannot render the text the first time it's created.
+        active: function () { game.time.events.add(Phaser.Timer.SECOND, createText, this); },
+        //  The Google Fonts we want to load (specify as many as you like in the array)
+        google: {
+            families: ['Revalia', 'Shadows Into Light', 'Boogaloo', 'Caveat']
+        }
+    };
+
+    function createText() {
+        //if (game.state.current == "question1") {
+            
+        //} else if (game.state.current == "question2") {
+            
+        //}
+        
+    }
+
+
     game.state.add('boot', GX.bootState);
     game.state.add('intro', GX.introState);
     game.state.add('question1', GX.question1State);
@@ -1325,5 +1363,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('boot');
+    game.state.start('question1');
 };
