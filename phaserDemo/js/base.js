@@ -40,12 +40,6 @@
         { viseme: "e", frame: 5 },
         { viseme: "sil", frame: 10 },
     ],
-    //gestures: [
-    //    { gesture: "sway", frames: [0, 1, 2, 1, 0] },
-    //    { gesture: "idea", frames: [6, 7, 8, 10, 11, 11, 11, 11, 11, 11, 11, 10, 8, 7, 6] },
-    //    { gesture: "sway2", frames: [0, 1, 3, 1, 0, 2, 4, 2] },
-    //    { gesture: "waving", frames: [9, 14, 17, 20, 17, 14, 9] },
-    //],
     gestures: [
         { gesture: "fistpump", frames: [18, 19, 20, 21, 21, 21, 21, 21, 20, 19, 18] },
         { gesture: "waiting", frames: [44, 45, 46, 47, 48, 49, 50, 51, 50, 49, 48, 47, 46, 45, 44, 45, 46, 47, 48, 49, 50, 51, 50, 49, 48, 47, 46, 45, 44] },
@@ -80,7 +74,9 @@
     styleAnswerOut: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
     questionSpacing: -10,
     answerSpacing: -10,
-    textDMZ: 20
+    textDMZ: 20,
+    xOffset: 50,
+    xOffset2: 10
 
 };
 
@@ -107,7 +103,6 @@ GX.introState = function (game) { };
 GX.introState.prototype = {
 
     init: function () {
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     },
 
@@ -125,7 +120,6 @@ GX.introState.prototype = {
         game.load.audio('intro', 'mp3/oh_hi.mp3');
 
     },
-
 
     create: function () {
         title = game.add.group();
@@ -327,21 +321,15 @@ GX.question1State = function (game) { };
 GX.question1State.prototype = {
 
     init: function () {
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
     },
 
     preload: function () {
 
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
-
-
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
         //game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
@@ -349,18 +337,13 @@ GX.question1State.prototype = {
         game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
         game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
 
-
     },
 
     create: function () {
-
-
         //game.world.alpha = 0;
-        var xOffset = 50;
-        var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text1_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text1_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text1_3, GX.styleAnswer);
+        var text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text1_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text1_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text1_3, GX.styleAnswer);
 
         text1.lineSpacing = GX.questionSpacing;
 
@@ -436,10 +419,8 @@ GX.question1State.prototype = {
         //ben.pivot.x = ben.width*-.25;
         //ben.pivot.y = ben.height * -.25;
 
-
         //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true);
         //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true); game.add.tween(ben.position).from({ x: .5, y: .5 }, 2000, null, true);
-
 
         // Set a default head postion for initial postion and after lip sync
         heads.frame = default_head;
@@ -525,18 +506,14 @@ GX.question1State.prototype = {
 GX.question2State = function (game) { };
 GX.question2State.prototype = {
     init: function () {
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     },
 
     preload: function () {
 
         game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
-
-
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
@@ -545,18 +522,18 @@ GX.question2State.prototype = {
         //game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json');
         //game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ');
 
+        //New version for testing:
+        //game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/16624646-846e-443e-b0ef-b2fd9ac6a937.json');
+        //game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/16624646-846e-443e-b0ef-b2fd9ac6a937.mp3 ');
 
     },
 
-
     create: function () {
-        var xOffset = 50;
-        var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text2_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text2_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text2_3, GX.styleAnswer);
-        var text4 = game.add.text(game.world.centerX - xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text2_4, GX.styleAnswer);
-        var text5 = game.add.text(game.world.centerX - xOffset2, text4.position.y + text4.texture.height + GX.textDMZ, GX.text2_5, GX.styleAnswer);
+        var text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text2_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text2_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text2_3, GX.styleAnswer);
+        var text4 = game.add.text(game.world.centerX - GX.xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text2_4, GX.styleAnswer);
+        var text5 = game.add.text(game.world.centerX - GX.xOffset2, text4.position.y + text4.texture.height + GX.textDMZ, GX.text2_5, GX.styleAnswer);
 
         text1.lineSpacing = GX.questionSpacing;
 
@@ -689,8 +666,8 @@ GX.question2State.prototype = {
             { timeline[i].body = 0; }
         }
 
-        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 900, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "hand_west", "gesture"),1100, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 1035, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 1391, clipduration, 300);
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
@@ -715,10 +692,10 @@ GX.question2State.prototype = {
     },
 
     render: function () {
-        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 
 };
@@ -726,14 +703,12 @@ GX.question2State.prototype = {
 GX.question3State = function (game) { };
 GX.question3State.prototype = {
     init: function () {
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     },
 
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
@@ -744,11 +719,9 @@ GX.question3State.prototype = {
     },
 
     create: function () {
-        var xOffset = 50;
-        var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text3_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text3_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text3_3, GX.styleAnswer);
+        var text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text3_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text3_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text3_3, GX.styleAnswer);
 
         text1.lineSpacing = GX.questionSpacing;
 
@@ -890,14 +863,12 @@ GX.question3State.prototype = {
 GX.question4State = function (game) { };
 GX.question4State.prototype = {
     init: function () {
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     },
 
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
@@ -908,12 +879,10 @@ GX.question4State.prototype = {
     },
 
     create: function () {
-        var xOffset = 50;
-        var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text4_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text4_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text4_3, GX.styleAnswer);
-        var text4 = game.add.text(game.world.centerX - xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text4_4, GX.styleAnswer);
+        var text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text4_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text4_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text4_3, GX.styleAnswer);
+        var text4 = game.add.text(game.world.centerX - GX.xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text4_4, GX.styleAnswer);
 
         text1.lineSpacing = GX.questionSpacing;
 
@@ -1068,14 +1037,12 @@ GX.question4State.prototype = {
 GX.question5State = function (game) { };
 GX.question5State.prototype = {
     init: function () {
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     },
 
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
@@ -1086,11 +1053,9 @@ GX.question5State.prototype = {
     },
 
     create: function () {
-        var xOffset = 50;
-        var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text5_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text5_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text5_3, GX.styleAnswer);
+        var text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text5_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text5_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text5_3, GX.styleAnswer);
 
         text1.lineSpacing = GX.questionSpacing;
 
@@ -1232,14 +1197,12 @@ GX.question5State.prototype = {
 GX.question6State = function (game) { };
 GX.question6State.prototype = {
     init: function () {
-        //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     },
 
     preload: function () {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        //game.load.spritesheet('bodies', 'png/bodies.png', 803, 832, 21);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
@@ -1250,11 +1213,9 @@ GX.question6State.prototype = {
     },
 
     create: function () {
-        var xOffset = 50;
-        var xOffset2 = 10;
-        var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text6_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text6_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text6_3, GX.styleAnswer);
+        var text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text6_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text6_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text6_3, GX.styleAnswer);
 
         text1.lineSpacing = GX.questionSpacing;
 
@@ -1453,11 +1414,7 @@ window.onload = function () {
     };
 
     function createText() {
-        //if (game.state.current == "question1") {
-
-        //} else if (game.state.current == "question2") {
-
-        //}    
+    
     }
 
     game.state.add('boot', GX.bootState);

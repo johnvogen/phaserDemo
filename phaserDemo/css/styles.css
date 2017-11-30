@@ -31,6 +31,14 @@ footer {
     /*margin-top:18px;*/
 }
 
+#footerText {
+    margin: 0 0 0px;
+}
+
+#logo {
+    width:70px;
+}
+
 /* On small screens, set height to 'auto' for sidenav and grid */
 @media screen and (max-width: 767px) {
     .sidenav {
