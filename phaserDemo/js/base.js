@@ -68,15 +68,19 @@
     ],
     characterOffsetX: 0,
     characterOffsetY: 130,
+    characterOffsetYFallin: -500,
     characterScaleX: .70,
     characterScaleY: .70,
     controlScaleX: 1,
     controlScaleY: 1,
     //styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
-    styleQuestion: { font: "32px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
-    styleAnswer: { font: "28px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
-    styleAnswerOver: { font: "28px Boogaloo", fill: "#ed1c24", wordWrap: true, wordWrapWidth: 600 },
-    styleAnswerOut: { font: "28px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 }
+    styleQuestion: { font: "40px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
+    styleAnswer: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
+    styleAnswerOver: { font: "36px Boogaloo", fill: "#ed1c24", wordWrap: true, wordWrapWidth: 600 },
+    styleAnswerOut: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
+    questionSpacing: -10,
+    answerSpacing: -10,
+    textDMZ: 20
 
 };
 
@@ -95,7 +99,7 @@ GX.bootState.prototype = {
 
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.state.start('intro');
+        game.state.start('question1');
     }
 }
 
@@ -303,22 +307,6 @@ GX.introState.prototype = {
             body.frame = timeline[tick].body;
         }
         if (timer.ms >= 17000) {
-
-            //this.music.stop();
-            //this.camera.fade('#000000');
-            //this.camera.onFadeComplete.add(this.proceed, this);
-
-
-
-            //this.music.stop();
-            //this.camera.fade('#000000');
-            //this.camera.onFadeComplete.add(this.fadeComplete, this);
-
-
-
-
-
-
             proceed();
         }
     },
@@ -338,10 +326,6 @@ GX.introState.prototype = {
 GX.question1State = function (game) { };
 GX.question1State.prototype = {
 
-
-
-
-
     init: function () {
         //this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -360,10 +344,12 @@ GX.question1State.prototype = {
 
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
-        game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
-        game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
-        //game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
-        //game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
+        //game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
+        //game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
+        game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
+        game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
+
+
     },
 
     create: function () {
@@ -373,13 +359,18 @@ GX.question1State.prototype = {
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text1_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text1_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text1_3, GX.styleAnswer);
+        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text1_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text1_3, GX.styleAnswer);
+
+        text1.lineSpacing = GX.questionSpacing;
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed);
+        text2.lineSpacing = GX.answerSpacing;
+
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
+        text3.lineSpacing = GX.answerSpacing;
 
         text2.events.onInputOver.add(function () {
             console.log("Hover over");
@@ -414,8 +405,11 @@ GX.question1State.prototype = {
 
         game.stage.backgroundColor = GX.stageColor;
         heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+
         eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+
         body.scale.setTo(2, 2);
 
         ctlPause = game.add.sprite(64, 20, 'controls');
@@ -437,6 +431,15 @@ GX.question1State.prototype = {
         ben.add(heads);
         ben.add(eyes);
         ben.add(body);
+
+        //game.add.tween(ben).to({ y: 450 }, 4000, Phaser.Easing.Bounce.Out, true);
+        //ben.pivot.x = ben.width*-.25;
+        //ben.pivot.y = ben.height * -.25;
+
+
+        //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true);
+        //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true); game.add.tween(ben.position).from({ x: .5, y: .5 }, 2000, null, true);
+
 
         // Set a default head postion for initial postion and after lip sync
         heads.frame = default_head;
@@ -482,11 +485,13 @@ GX.question1State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
+
+        addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
         addgesture(getByValue(GX.gestures, "idea", "gesture"), 840, clipduration, 10);
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
-        console.log(timeline);
+        //console.log(timeline);
 
         // Start the show
         audiotrack.play();
@@ -535,10 +540,12 @@ GX.question2State.prototype = {
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
-        game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
-        game.load.audio('intro', 'mp3/567956bb-ff6a-4601-bae8-b16e147411ae.mp3');
-        //game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json');
-        //game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ');
+        //game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
+        //game.load.audio('intro', 'mp3/567956bb-ff6a-4601-bae8-b16e147411ae.mp3');
+        game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json');
+        game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ');
+
+
     },
 
 
@@ -546,19 +553,28 @@ GX.question2State.prototype = {
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text2_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text2_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text2_3, GX.styleAnswer);
-        var text4 = game.add.text(game.world.centerX - xOffset2, 460, GX.text2_4, GX.styleAnswer);
-        var text5 = game.add.text(game.world.centerX - xOffset2, 580, GX.text2_5, GX.styleAnswer);
+        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text2_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text2_3, GX.styleAnswer);
+        var text4 = game.add.text(game.world.centerX - xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text2_4, GX.styleAnswer);
+        var text5 = game.add.text(game.world.centerX - xOffset2, text4.position.y + text4.texture.height + GX.textDMZ, GX.text2_5, GX.styleAnswer);
+
+        text1.lineSpacing = GX.questionSpacing;
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed, this);
+        text2.lineSpacing = GX.answerSpacing;
+
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed, this);
+        text3.lineSpacing = GX.answerSpacing;
+
         text4.inputEnabled = true;
         text4.events.onInputUp.add(proceed, this);
+        text4.lineSpacing = GX.answerSpacing;
+
         text5.inputEnabled = true;
         text5.events.onInputUp.add(proceed, this);
+        text5.lineSpacing = GX.answerSpacing;
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -731,13 +747,18 @@ GX.question3State.prototype = {
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text3_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text3_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text3_3, GX.styleAnswer);
+        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text3_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text3_3, GX.styleAnswer);
+
+        text1.lineSpacing = GX.questionSpacing;
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed, this);
+        text2.lineSpacing = GX.answerSpacing;
+
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed, this);
+        text3.lineSpacing = GX.answerSpacing;
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -890,16 +911,23 @@ GX.question4State.prototype = {
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text4_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text4_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text4_3, GX.styleAnswer);
-        var text4 = game.add.text(game.world.centerX - xOffset2, 460, GX.text4_4, GX.styleAnswer);
+        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text4_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text4_3, GX.styleAnswer);
+        var text4 = game.add.text(game.world.centerX - xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text4_4, GX.styleAnswer);
+
+        text1.lineSpacing = GX.questionSpacing;
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed, this);
+        text2.lineSpacing = GX.answerSpacing;
+
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed, this);
+        text3.lineSpacing = GX.answerSpacing;
+
         text4.inputEnabled = true;
         text4.events.onInputUp.add(proceed, this);
+        text4.lineSpacing = GX.answerSpacing;
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -1061,13 +1089,18 @@ GX.question5State.prototype = {
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text5_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text5_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text5_3, GX.styleAnswer);
+        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text5_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text5_3, GX.styleAnswer);
+
+        text1.lineSpacing = GX.questionSpacing;
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed, this);
+        text2.lineSpacing = GX.answerSpacing;
+
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed, this);
+        text3.lineSpacing = GX.answerSpacing;
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
@@ -1220,13 +1253,18 @@ GX.question6State.prototype = {
         var xOffset = 50;
         var xOffset2 = 10;
         var text1 = game.add.text(game.world.centerX - xOffset, 100, GX.text6_1, GX.styleQuestion);
-        var text2 = game.add.text(game.world.centerX - xOffset2, 220, GX.text6_2, GX.styleAnswer);
-        var text3 = game.add.text(game.world.centerX - xOffset2, 340, GX.text6_3, GX.styleAnswer);
+        var text2 = game.add.text(game.world.centerX - xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text6_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text6_3, GX.styleAnswer);
+
+        text1.lineSpacing = GX.questionSpacing;
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed, this);
+        text2.lineSpacing = GX.answerSpacing;
+
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed, this);
+        text3.lineSpacing = GX.answerSpacing;
 
         text2.events.onInputOver.add(function () {
             this.game.canvas.style.cursor = "pointer";
