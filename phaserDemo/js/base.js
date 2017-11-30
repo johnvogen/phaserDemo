@@ -486,7 +486,7 @@ GX.question1State.prototype = {
             { timeline[i].body = 0; }
         }
 
-        addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
+        //addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
         addgesture(getByValue(GX.gestures, "idea", "gesture"), 840, clipduration, 10);
 
         // Scale sprite group to 55%
@@ -540,10 +540,10 @@ GX.question2State.prototype = {
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
 
-        //game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
-        //game.load.audio('intro', 'mp3/567956bb-ff6a-4601-bae8-b16e147411ae.mp3');
-        game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json');
-        game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ');
+        game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
+        game.load.audio('intro', 'mp3/567956bb-ff6a-4601-bae8-b16e147411ae.mp3');
+        //game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json');
+        //game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ');
 
 
     },
