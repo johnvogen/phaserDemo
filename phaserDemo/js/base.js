@@ -3,7 +3,7 @@
     text1_2: "Pay a lot less out of my paycheck and more only when I actually need care.",
     text1_3: "Pay a lot more out of my paycheck and less when I receive care.",
     text2_1: "How often do you think you’ll go to a doctor during the year?",
-    text2_2: "Rarely. 1 or 2 total visits for a minor illness or injury",
+    text2_2: "Rarely. 1 or 2 total visits for a minor illness or injury.",
     text2_3: "Occasionally. 3 to 7 total visits for minor illnesses or injuries.",
     text2_4: "Frequently. 8 or more total visits, or dealing with a serious health condition.",
     text2_5: "I will only go for my preventive visits.",
@@ -44,12 +44,12 @@
         { gesture: "fistpump", frames: [18, 19, 20, 21, 21, 21, 21, 21, 20, 19, 18] },
         { gesture: "waiting", frames: [44, 45, 46, 47, 48, 49, 50, 51, 50, 49, 48, 47, 46, 45, 44, 45, 46, 47, 48, 49, 50, 51, 50, 49, 48, 47, 46, 45, 44] },
         { gesture: "idea", frames: [1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2, 1] },
-        { gesture: "present1", frames: [41] },
-        { gesture: "present2", frames: [42] },
+        { gesture: "present1_twoHanded", frames: [41] },
+        { gesture: "present2_oneHanded", frames: [42] },
         { gesture: "armcross", frames: [43] },
         { gesture: "heartfelt", frames: [22] },
-        { gesture: "armraise1", frames: [23] },
-        { gesture: "armraise2", frames: [24] },
+        { gesture: "armraise1_leftChest", frames: [23] },
+        { gesture: "armraise2_rightChest", frames: [24] },
         { gesture: "please", frames: [25] },
         { gesture: "armsup", frames: [27] },
         { gesture: "armsout", frames: [26] },
@@ -65,8 +65,13 @@
     characterOffsetYFallin: -500,
     characterScaleX: .70,
     characterScaleY: .70,
-    controlScaleX: 1,
-    controlScaleY: 1,
+    controlScaleX: .6,
+    controlScaleY: .6,
+    xOffset: 50,
+    xOffset2: 10,
+    ctlX: 64,
+    ctlY: 20,
+    ctlSeperation: 50,
     //styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
     styleQuestion: { font: "40px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
     styleAnswer: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
@@ -74,9 +79,7 @@
     styleAnswerOut: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
     questionSpacing: -10,
     answerSpacing: -10,
-    textDMZ: 20,
-    xOffset: 50,
-    xOffset2: 10
+    textDMZ: 20
 
 };
 
@@ -330,7 +333,7 @@ GX.question1State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
         //game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
         //game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
@@ -395,18 +398,42 @@ GX.question1State.prototype = {
 
         body.scale.setTo(2, 2);
 
-        ctlPause = game.add.sprite(64, 20, 'controls');
-        ctlPause.frame = 3;
+
+        //Control Block start
+        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        ctlHome.frame = 0;
+        ctlHome.inputEnabled = true;
+        ctlHome.events.onInputUp.add(function () {
+            audiotrack.destroy();
+            game.state.start('question1');
+        });
+        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation , GX.ctlY, 'controls');
+        ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
             game.paused = true; audiotrack.pause();
         });
         ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
-        //ctlRestart = game.add.sprite(0, 0, 'controls');
-        //ctlRestart.frame = 0;
-        //ctlRestart.inputEnabled = true;
-        //ctlRestart.events.onInputUp.add(function () { game.paused = true; audiotrack.pause(); });
+        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlBack.frame = 2;
+        ctlBack.inputEnabled = true;
+        ctlBack.events.onInputUp.add(function () {
+            goBack();         
+        });
+        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlReplay.frame = 3;
+        ctlReplay.inputEnabled = true;
+        ctlReplay.events.onInputUp.add(function () {
+            replay();
+        });
+        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+        //Control Block end
+
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -468,7 +495,11 @@ GX.question1State.prototype = {
         }
 
         //addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
-        addgesture(getByValue(GX.gestures, "idea", "gesture"), 840, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 400, clipduration, 150);
+        addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 1000, clipduration, 200);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2500, clipduration, 10);
+
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
@@ -496,10 +527,10 @@ GX.question1State.prototype = {
     },
 
     render: function () {
-        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 };
 
@@ -515,7 +546,8 @@ GX.question2State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+        //game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
         game.load.json('viseme', 'data/567956bb-ff6a-4601-bae8-b16e147411ae.json');
         game.load.audio('intro', 'mp3/567956bb-ff6a-4601-bae8-b16e147411ae.mp3');
@@ -606,13 +638,40 @@ GX.question2State.prototype = {
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
         body.scale.setTo(2, 2);
 
-        ctlPause = game.add.sprite(64, 20, 'controls');
-        ctlPause.frame = 3;
+        //Control Block start
+        ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        ctlHome.frame = 0;
+        ctlHome.inputEnabled = true;
+        ctlHome.events.onInputUp.add(function () {
+            audiotrack.destroy();
+            game.state.start('question1');
+        });
+        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
             game.paused = true; audiotrack.pause();
         });
         ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlBack.frame = 2;
+        ctlBack.inputEnabled = true;
+        ctlBack.events.onInputUp.add(function () {
+            goBack(); 
+        });
+        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlReplay.frame = 3;
+        ctlReplay.inputEnabled = true;
+        ctlReplay.events.onInputUp.add(function () {
+            replay();
+        });
+        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+        //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -666,8 +725,31 @@ GX.question2State.prototype = {
             { timeline[i].body = 0; }
         }
 
-        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 1035, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 1391, clipduration, 300);
+
+
+        addgesture(getByValue(GX.gestures, "wave", "gesture"), 100, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "fistpump", "gesture"), 300, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 600, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "idea", "gesture"), 1000, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "present1_twoHanded", "gesture"), 1300, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 1700, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 2100, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "heartfelt", "gesture"), 2600, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armraise1_leftChest", "gesture"), 3200, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 4000, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "please", "gesture"), 4500, clipduration, 300);
+
+        addgesture(getByValue(GX.gestures, "armsup", "gesture"), 4800, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armsout", "gesture"), 5200, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armswayout", "gesture"), 5600, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 6000, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 6400, clipduration, 300);
+
+        addgesture(getByValue(GX.gestures, "walk", "gesture"), 6800, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 7500, clipduration, 10);
+
+
+
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
@@ -710,7 +792,7 @@ GX.question3State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
         game.load.json('viseme', 'data/c93264be-bb36-4443-b294-19dafca8bdbb.json');
         game.load.audio('intro', 'mp3/c93264be-bb36-4443-b294-19dafca8bdbb.mp3');
@@ -768,13 +850,40 @@ GX.question3State.prototype = {
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
         body.scale.setTo(2, 2);
 
-        ctlPause = game.add.sprite(64, 20, 'controls');
-        ctlPause.frame = 3;
+        //Control Block start
+        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        ctlHome.frame = 0;
+        ctlHome.inputEnabled = true;
+        ctlHome.events.onInputUp.add(function () {
+            audiotrack.destroy();
+            game.state.start('question1');
+        });
+        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
             game.paused = true; audiotrack.pause();
         });
         ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlBack.frame = 2;
+        ctlBack.inputEnabled = true;
+        ctlBack.events.onInputUp.add(function () {
+            goBack();
+        });
+        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlReplay.frame = 3;
+        ctlReplay.inputEnabled = true;
+        ctlReplay.events.onInputUp.add(function () {
+            replay();
+        });
+        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+        //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -870,7 +979,7 @@ GX.question4State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
         game.load.json('viseme', 'data/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.json');
         game.load.audio('intro', 'mp3/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.mp3');
@@ -942,13 +1051,40 @@ GX.question4State.prototype = {
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
         body.scale.setTo(2, 2);
 
-        ctlPause = game.add.sprite(64, 20, 'controls');
-        ctlPause.frame = 3;
+        //Control Block start
+        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        ctlHome.frame = 0;
+        ctlHome.inputEnabled = true;
+        ctlHome.events.onInputUp.add(function () {
+            audiotrack.destroy();
+            game.state.start('question1');
+        });
+        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
             game.paused = true; audiotrack.pause();
         });
         ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlBack.frame = 2;
+        ctlBack.inputEnabled = true;
+        ctlBack.events.onInputUp.add(function () {
+            goBack();
+        });
+        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlReplay.frame = 3;
+        ctlReplay.inputEnabled = true;
+        ctlReplay.events.onInputUp.add(function () {
+            replay();
+        });
+        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+        //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -1044,7 +1180,7 @@ GX.question5State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
         game.load.json('viseme', 'data/828a49af-eae5-4f82-9279-a7bbb51d2f01.json');
         game.load.audio('intro', 'mp3/828a49af-eae5-4f82-9279-a7bbb51d2f01.mp3');
@@ -1102,13 +1238,40 @@ GX.question5State.prototype = {
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
         body.scale.setTo(2, 2);
 
-        ctlPause = game.add.sprite(64, 20, 'controls');
-        ctlPause.frame = 3;
+        //Control Block start
+        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        ctlHome.frame = 0;
+        ctlHome.inputEnabled = true;
+        ctlHome.events.onInputUp.add(function () {
+            audiotrack.destroy();
+            game.state.start('question1');
+        });
+        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
             game.paused = true; audiotrack.pause();
         });
         ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlBack.frame = 2;
+        ctlBack.inputEnabled = true;
+        ctlBack.events.onInputUp.add(function () {
+            goBack();
+        });
+        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlReplay.frame = 3;
+        ctlReplay.inputEnabled = true;
+        ctlReplay.events.onInputUp.add(function () {
+            replay();
+        });
+        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+        //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -1204,7 +1367,7 @@ GX.question6State.prototype = {
         game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
         game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-        game.load.spritesheet('controls', 'png/controls.png', 32, 32, 24);
+        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
         game.load.json('viseme', 'data/9331fbbc-d5b0-48ae-9705-334273bb50c5.json');
         game.load.audio('intro', 'mp3/9331fbbc-d5b0-48ae-9705-334273bb50c5.mp3');
@@ -1262,13 +1425,40 @@ GX.question6State.prototype = {
         body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
         body.scale.setTo(2, 2);
 
-        ctlPause = game.add.sprite(64, 20, 'controls');
-        ctlPause.frame = 3;
+        //Control Block start
+        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        ctlHome.frame = 0;
+        ctlHome.inputEnabled = true;
+        ctlHome.events.onInputUp.add(function () {
+            audiotrack.destroy();
+            game.state.start('question1');
+        });
+        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
             game.paused = true; audiotrack.pause();
         });
         ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlBack.frame = 2;
+        ctlBack.inputEnabled = true;
+        ctlBack.events.onInputUp.add(function () {
+            goBack();
+        });
+        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlReplay.frame = 3;
+        ctlReplay.inputEnabled = true;
+        ctlReplay.events.onInputUp.add(function () {
+            replay();
+        });
+        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+        //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
         // individual sprites for moving and scaling the character
@@ -1377,6 +1567,77 @@ function proceed(item) {
     } else if (game.state.current == "question6") {
         alert("Display Results");
     }
+}
+
+function goBack() {
+    switch (game.state.current) {
+        case "intro":
+            audiotrack.destroy();
+            game.state.start('intro');
+            break;
+        case "question1":
+            audiotrack.destroy();
+            game.state.start('intro');
+            break;
+        case "question2":
+            audiotrack.destroy();
+            game.state.start('question1');
+            break;
+        case "question3":
+            audiotrack.destroy();
+            game.state.start('question2');
+            break;
+        case "question4":
+            audiotrack.destroy();
+            game.state.start('question3');
+            break;
+        case "question5":
+            audiotrack.destroy();
+            game.state.start('question4');
+            break;
+        case "question6":
+            audiotrack.destroy();
+            game.state.start('question5');
+            break;
+        default:
+            alert("No previous state");
+    }  
+
+}
+
+function replay() {
+    switch (game.state.current) {
+        case "intro":
+            audiotrack.destroy();
+            game.state.start('intro');
+            break;
+        case "question1":
+            audiotrack.destroy();
+            game.state.start('question1');
+            break;
+        case "question2":
+            audiotrack.destroy();
+            game.state.start('question2');
+            break;
+        case "question3":
+            audiotrack.destroy();
+            game.state.start('question3');
+            break;
+        case "question4":
+            audiotrack.destroy();
+            game.state.start('question4');
+            break;
+        case "question5":
+            audiotrack.destroy();
+            game.state.start('question5');
+            break;
+        case "question6":
+            audiotrack.destroy();
+            game.state.start('question6');
+            break;
+        default:
+            alert("No previous state");
+    }  
 }
 
 function addgesture(obj, position, clipduration, rep) {
