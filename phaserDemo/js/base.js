@@ -98,7 +98,7 @@ GX.bootState.prototype = {
 
     create: function () {
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.state.start('question1');
+        game.state.start('intro');
     }
 }
 
@@ -319,6 +319,221 @@ GX.introState.prototype = {
         //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 }
+
+GX.educationalState = function (game) { };
+GX.educationalState.prototype = {
+
+    init: function () {
+        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    },
+
+    preload: function () {
+
+        game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+        game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
+        game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
+        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
+        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
+
+        //game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
+        //game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
+        game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
+        game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
+
+    },
+
+    create: function () {
+        //game.world.alpha = 0;
+        var text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text1_1, GX.styleQuestion);
+        var text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text1_2, GX.styleAnswer);
+        var text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text1_3, GX.styleAnswer);
+
+        text1.lineSpacing = GX.questionSpacing;
+
+        text2.inputEnabled = true;
+        text2.events.onInputUp.add(proceed);
+        text2.lineSpacing = GX.answerSpacing;
+
+        text3.inputEnabled = true;
+        text3.events.onInputUp.add(proceed);
+        text3.lineSpacing = GX.answerSpacing;
+
+        text2.events.onInputOver.add(function () {
+            console.log("Hover over");
+            this.game.canvas.style.cursor = "pointer";
+            text2.setStyle(GX.styleAnswerOver);
+
+        }, this);
+        text2.events.onInputOut.add(function () {
+            this.game.canvas.style.cursor = "default";
+            text2.setStyle(GX.styleAnswerOut);
+        }, this);
+
+        text3.events.onInputOver.add(function () {
+            this.game.canvas.style.cursor = "pointer";
+            text3.setStyle(GX.styleAnswerOver);
+        }, this);
+        text3.events.onInputOut.add(function () {
+            this.game.canvas.style.cursor = "default";
+            text3.setStyle(GX.styleAnswerOut);
+        }, this);
+
+        var prior_vtime = 999;
+        var duration = 0;
+        var count = 0;
+        const default_head = 10;
+        var prior_vframe = default_head;
+        var i = 0;
+
+        // It's visually distracting when the lip frames change too quickly.
+        // set a ms threshold to discard lipsync frames with short durattion
+        const viseme_threshold = 35;
+
+        game.stage.backgroundColor = GX.stageColor;
+        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+
+        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+
+        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+
+        body.scale.setTo(2, 2);
+
+
+        //Control Block start
+        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        ctlHome.frame = 0;
+        ctlHome.inputEnabled = true;
+        ctlHome.events.onInputUp.add(function () {
+            audiotrack.destroy();
+            game.state.start('question1');
+        });
+        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlPause.frame = 1;
+        ctlPause.inputEnabled = true;
+        ctlPause.events.onInputUp.add(function () {
+            game.paused = true; audiotrack.pause();
+        });
+        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlBack.frame = 2;
+        ctlBack.inputEnabled = true;
+        ctlBack.events.onInputUp.add(function () {
+            goBack();
+        });
+        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlReplay.frame = 3;
+        ctlReplay.inputEnabled = true;
+        ctlReplay.events.onInputUp.add(function () {
+            replay();
+        });
+        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+        //Control Block end
+
+
+        // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
+        // individual sprites for moving and scaling the character
+        ben = game.add.group();
+        ben.add(heads);
+        ben.add(eyes);
+        ben.add(body);
+
+        //game.add.tween(ben).to({ y: 450 }, 4000, Phaser.Easing.Bounce.Out, true);
+        //ben.pivot.x = ben.width*-.25;
+        //ben.pivot.y = ben.height * -.25;
+
+        //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true);
+        //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true); game.add.tween(ben.position).from({ x: .5, y: .5 }, 2000, null, true);
+
+        // Set a default head postion for initial postion and after lip sync
+        heads.frame = default_head;
+        eyes.frame = 1;
+
+        audiotrack = game.add.audio('intro');
+        timer = game.time.create(false);
+
+        var gameJSON = game.cache.getJSON('viseme');
+        for (var key in gameJSON) {
+            if (gameJSON.hasOwnProperty(key)) {
+                vtype = gameJSON[key].type;
+                vtime = gameJSON[key].time;
+                vvalue = gameJSON[key].value;
+                if (count > 0) {
+                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
+                    // determine display duration
+                    duration = vtime - prior_vtime;
+                    // Only display frames with sufficient duration
+                    if (duration > viseme_threshold) {
+                        for (i = i; i < Math.round(vtime / 10); i++) {
+                            timeline[i] = { "head": prior_vframe };
+                        }
+                        timeline[i] = { "head": vframe };
+                    }
+                    prior_vtime = vtime;
+                    prior_vframe = vframe;
+                }
+            }
+            count++;
+        }
+
+        // Add 1/2 second of default head position.. This helps account for missed ticks and timing differences between
+        // phaser vs. audio file timing 
+        var extension = i + 50;
+        for (i = i + 1; i <= extension; i++) {
+            timeline[i] = { "head": default_head };
+        }
+        clipduration = i;
+        // Ends Lipsyncing / clip setup 
+
+        // Start body setup.. default to body 0
+        for (i = 0; i < clipduration; i++) {
+            { timeline[i].body = 0; }
+        }
+
+        //addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
+        //addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
+        //addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 400, clipduration, 150);
+        //addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 1000, clipduration, 200);
+        //addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2500, clipduration, 10);
+
+
+        // Scale sprite group to 55%
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
+        //console.log(timeline);
+
+        // Start the show
+        audiotrack.play();
+
+        // Possibly blink eyes every 1/2 second
+        timer.repeat(500, 20000, function () { blink(eyes); }, this);
+        timer.start();
+
+        //game.add.tween(game.world).to({ alpha: 1 }, 1000, "Linear", true);
+
+        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
+
+    },
+
+    update: function () {
+        var tick = Math.round(audiotrack.currentTime / 10);
+        if (tick <= clipduration) {
+            heads.frame = timeline[tick].head;
+            body.frame = timeline[tick].body;
+        }
+    },
+
+    render: function () {
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        game.debug.text('Educational State: ', 32, 160);
+    }
+};
 
 GX.question1State = function (game) { };
 GX.question1State.prototype = {
@@ -774,10 +989,10 @@ GX.question2State.prototype = {
     },
 
     render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 
 };
@@ -961,10 +1176,10 @@ GX.question3State.prototype = {
     },
 
     render: function () {
-        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 
 };
@@ -1553,6 +1768,8 @@ function getByValue(arr, value, mykey) {
 function proceed(item) {
     audiotrack.destroy();
     if (game.state.current == "intro") {
+        game.state.start('educational');
+    } else if (game.state.current == "educational") {
         game.state.start('question1');
     } else if (game.state.current == "question1") {
         game.state.start('question2');
@@ -1575,9 +1792,13 @@ function goBack() {
             audiotrack.destroy();
             game.state.start('intro');
             break;
-        case "question1":
+        case "educational":
             audiotrack.destroy();
             game.state.start('intro');
+            break;
+        case "question1":
+            audiotrack.destroy();
+            game.state.start('educational');
             break;
         case "question2":
             audiotrack.destroy();
@@ -1610,6 +1831,10 @@ function replay() {
         case "intro":
             audiotrack.destroy();
             game.state.start('intro');
+            break;
+        case "educational":
+            audiotrack.destroy();
+            game.state.start('educational');
             break;
         case "question1":
             audiotrack.destroy();
@@ -1680,6 +1905,7 @@ window.onload = function () {
 
     game.state.add('boot', GX.bootState);
     game.state.add('intro', GX.introState);
+    game.state.add('educational', GX.educationalState);
     game.state.add('question1', GX.question1State);
     game.state.add('question2', GX.question2State);
     game.state.add('question3', GX.question3State);
