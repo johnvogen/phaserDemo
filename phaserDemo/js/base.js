@@ -117,7 +117,7 @@ GX.bootState.prototype = {
 
     create: function () {
         //game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.state.start('intro');
+        game.state.start('test');
     }
 }
 
