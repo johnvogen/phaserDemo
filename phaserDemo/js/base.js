@@ -427,7 +427,7 @@ GX.testState.prototype = {
         text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_0, GX.styleQuestion);
         text0.lineSpacing = GX.questionSpacing;
         text0.alpha = 0;
-        game.add.tween(text0).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 9000);
+        game.add.tween(text0).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31000);
 
 
         text1 = game.add.text(game.world.centerX - GX.xOffset2, text0.position.y + text0.texture.height + GX.textDMZ, GX.text0_1, GX.styleAnswer);
@@ -442,7 +442,7 @@ GX.testState.prototype = {
         text1.events.onInputUp.add(proceedTo);
         text1.lineSpacing = GX.answerSpacing;
         text1.alpha = 0;
-        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 12000);
+        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31500);
 
         
 
@@ -450,25 +450,25 @@ GX.testState.prototype = {
         text2.events.onInputUp.add(proceed);
         text2.lineSpacing = GX.answerSpacing;
         text2.alpha = 0;
-        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 15500);
+        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32000);
 
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
         text3.lineSpacing = GX.answerSpacing;
         text3.alpha = 0;
-        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 19500);
+        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32500);
 
         text4.inputEnabled = true;
         text4.events.onInputUp.add(proceed);
         text4.lineSpacing = GX.answerSpacing;
         text4.alpha = 0;
-        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 23500);
+        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 33000);
 
         text5.inputEnabled = true;
         text5.events.onInputUp.add(proceed);
         text5.lineSpacing = GX.answerSpacing;
         text5.alpha = 0;
-        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 27500);
+        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 33500);
 
         text1.events.onInputOver.add(function () {
             console.log("Hover over");
@@ -597,7 +597,7 @@ GX.testState.prototype = {
         ben.add(eyes);
         ben.add(body);
 
-        game.add.tween(ben).to({ x: -300 }, 300, Phaser.Easing.Quadratic.Out, true, 8300);
+        game.add.tween(ben).to({ x: -300 }, 300, Phaser.Easing.Quadratic.Out, true, 15500);
 
  
 
@@ -656,12 +656,15 @@ GX.testState.prototype = {
 
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
 
-        //addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
-        //addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
-        //addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 400, clipduration, 150);
-        //addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 1000, clipduration, 200);
-        //addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2500, clipduration, 10);
-
+        addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 700, clipduration, 150);
+        addgesture(getByValue(GX.gestures, "present1_twoHanded", "gesture"), 1500, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "fistpump", "gesture"), 2050, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2300, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 2700, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 3100, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 4000, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 5000, clipduration, 150);
 
         // Scale sprite group to 55%
 
@@ -2647,5 +2650,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('boot');
+    game.state.start('test');
 };
