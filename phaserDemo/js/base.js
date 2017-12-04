@@ -371,7 +371,6 @@ GX.testState.prototype = {
         game.load.image('calendar', 'png/educational/Calendar.png');
         game.load.image('gradBooks', 'png/educational/Gradhat-Books.png');
         game.load.image('grad', 'png/educational/Gradhat.png');
-        game.load.image('pacifier', 'png/educational/Pacifier.png');
         game.load.image('militaryMetal', 'png/educational/Militarymetal.png');
         game.load.image('militaryMetal_bronze', 'png/educational/Militarystatue-bronze.png');
         game.load.image('pacifier', 'png/educational/pacifier.png');
