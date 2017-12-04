@@ -74,6 +74,7 @@
         { gesture: "wave", frames: [11, 12, 13, 14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15, 14, 13, 12, 11] }
     ],
     characterOffsetX: 0,
+    educationalCharacterOffsetX: 380,
     characterOffsetY: 130,
     characterOffsetYFallin: -500,
     characterScaleX: .70,
@@ -370,6 +371,9 @@ GX.testState.prototype = {
         game.load.image('gradBooks', 'png/educational/Gradhat-Books.png');
         game.load.image('grad', 'png/educational/Gradhat.png');
         game.load.image('pacifier', 'png/educational/Pacifier.png');
+        game.load.image('militaryMetal', 'png/educational/Militarymetal.png');
+        game.load.image('militaryMetal_bronze', 'png/educational/Militarystatue-bronze.png');
+        game.load.image('pacifier', 'png/educational/Pacifier.png');
 
         game.load.json('viseme', 'data/edu_intro2.json');
         game.load.audio('intro', 'mp3/edu_intro2.mp3');
@@ -380,19 +384,22 @@ GX.testState.prototype = {
     create: function () {
         //game.world.alpha = 0;
 
-        books = game.add.sprite(GX.educationalIconX, -100, 'books');
-        books.scale.x = .5;
-        books.scale.y = .5;
-        books.anchor.setTo(.5, .5);
-        game.add.tween(books).to({ y: 245 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);
+        militaryMetal = game.add.sprite(GX.educationalIconX, -100, 'militaryMetal');
+        militaryMetal.scale.x = .5;
+        militaryMetal.scale.y = .5;
+        militaryMetal.anchor.setTo(.5, .5);
+        tween1 = game.add.tween(militaryMetal).to({ y: 200 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);        
 
-        calendar = game.add.sprite(GX.educationalIconX, 400, 'pacifier');
-        calendar.alpha = 0;
-        calendar.scale.x = .0;
-        calendar.scale.y = .0;
-        calendar.anchor.setTo(.5, .5);
-        game.add.tween(calendar).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000);
-        game.add.tween(calendar.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
+
+
+        pacifier = game.add.sprite(GX.educationalIconX, 400, 'pacifier');
+        pacifier.alpha = 0;
+        pacifier.scale.x = .0;
+        pacifier.scale.y = .0;
+        pacifier.anchor.setTo(.5, .5);
+        game.add.tween(pacifier).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000);
+        game.add.tween(pacifier.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
+
 
         gradBooks = game.add.sprite(GX.educationalIconX, 600, 'gradBooks');
         gradBooks.alpha = 0;
@@ -401,6 +408,14 @@ GX.testState.prototype = {
         gradBooks.anchor.setTo(.5, .5);
         game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000);
         game.add.tween(gradBooks.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 24000);
+
+        calendar = game.add.sprite(-150, 600, 'calendar');
+        calendar.scale.x = .5;
+        calendar.scale.y = .5;
+        calendar.anchor.setTo(.5, .5);
+        game.add.tween(calendar).to({ x: 700 }, 1000, Phaser.Easing.Bounce.Out, true, 28000);
+
+
 
         // Add another rotation tween to the same character.
         var oddeven = (Math.floor(Math.random() * 2) + 1);
@@ -519,11 +534,11 @@ GX.testState.prototype = {
         const viseme_threshold = 35;
 
         game.stage.backgroundColor = GX.stageColor;
-        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
+        heads = game.add.sprite(350 + GX.educationalCharacterOffsetX, 10 + GX.characterOffsetY, 'heads')
 
-        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
+        eyes = game.add.sprite(455 + GX.educationalCharacterOffsetX, 95 + GX.characterOffsetY, 'eyes');
 
-        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
+        body = game.add.sprite(99 + GX.educationalCharacterOffsetX, -45 + GX.characterOffsetY, 'bodies');
 
         body.scale.setTo(2, 2);
 
@@ -581,6 +596,8 @@ GX.testState.prototype = {
         ben.add(heads);
         ben.add(eyes);
         ben.add(body);
+
+        game.add.tween(ben).to({ x: -300 }, 300, Phaser.Easing.Quadratic.Out, true, 8300);
 
  
 
@@ -1611,26 +1628,13 @@ GX.question2State.prototype = {
 
 
 
-        addgesture(getByValue(GX.gestures, "wave", "gesture"), 100, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "fistpump", "gesture"), 300, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 600, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "idea", "gesture"), 1000, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "present1_twoHanded", "gesture"), 1300, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 1700, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 2100, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "heartfelt", "gesture"), 2600, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "armraise1_leftChest", "gesture"), 3200, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 4000, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "please", "gesture"), 4500, clipduration, 300);
 
-        addgesture(getByValue(GX.gestures, "armsup", "gesture"), 4800, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "armsout", "gesture"), 5200, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "armswayout", "gesture"), 5600, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 6000, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 6400, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 1000, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 1400, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 1800, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 3240, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 4540, clipduration, 400);
 
-        addgesture(getByValue(GX.gestures, "walk", "gesture"), 6800, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 7500, clipduration, 10);
 
 
 
@@ -1658,10 +1662,10 @@ GX.question2State.prototype = {
     },
 
     render: function () {
-        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 
 };
@@ -2523,7 +2527,7 @@ function goBack() {
             break;
         case "question1":
             audiotrack.destroy();
-            game.state.start('educational');
+            game.state.start('test');
             break;
         case "question2":
             audiotrack.destroy();
@@ -2643,5 +2647,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('test');
+    game.state.start('boot');
 };
