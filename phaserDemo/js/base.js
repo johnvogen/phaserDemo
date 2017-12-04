@@ -374,7 +374,7 @@ GX.testState.prototype = {
         game.load.image('pacifier', 'png/educational/Pacifier.png');
         game.load.image('militaryMetal', 'png/educational/Militarymetal.png');
         game.load.image('militaryMetal_bronze', 'png/educational/Militarystatue-bronze.png');
-        game.load.image('pacifier', 'png/educational/Pacifier.png');
+        game.load.image('pacifier', 'png/educational/pacifier.png');
 
         game.load.json('viseme', 'data/edu_intro2.json');
         game.load.audio('intro', 'mp3/edu_intro2.mp3');
@@ -715,11 +715,11 @@ GX.testState.prototype = {
     },
 
     render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
-        game.debug.text('Test State: ', 32, 160);
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        //game.debug.text('Test State: ', 32, 160);
     }
 };
 
@@ -1025,19 +1025,19 @@ GX.educationalMedicalState.prototype = {
         text1.lineSpacing = GX.questionSpacing;
 
         text1.inputEnabled = true;
-        text1.events.onInputUp.add(proceed);
+        //text1.events.onInputUp.add(proceed);
         text1.lineSpacing = GX.answerSpacing;
 
         text2.inputEnabled = true;
-        text2.events.onInputUp.add(proceed);
+        //text2.events.onInputUp.add(proceed);
         text2.lineSpacing = GX.answerSpacing;
 
         text3.inputEnabled = true;
-        text3.events.onInputUp.add(proceed);
+        //text3.events.onInputUp.add(proceed);
         text3.lineSpacing = GX.answerSpacing;
 
         text4.inputEnabled = true;
-        text4.events.onInputUp.add(proceed);
+        //text4.events.onInputUp.add(proceed);
         text4.lineSpacing = GX.answerSpacing;
 
         text1.events.onInputOver.add(function () {
@@ -2586,6 +2586,10 @@ function replay() {
         case "educational":
             audiotrack.destroy();
             game.state.start('educational');
+            break;
+        case "educationalMedical":
+            audiotrack.destroy();
+            game.state.start('educationalMedical');
             break;
         case "question1":
             audiotrack.destroy();
