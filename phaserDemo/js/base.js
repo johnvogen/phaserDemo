@@ -96,7 +96,8 @@
     questionSpacing: -10,
     answerSpacing: -10,
     textDMZ: 20,
-    educationalIconX: 1030
+    educationalIconX: 900,
+    educationalIconScale: .8
 
 };
 
@@ -384,36 +385,41 @@ GX.testState.prototype = {
     create: function () {
         //game.world.alpha = 0;
 
-        militaryMetal = game.add.sprite(GX.educationalIconX, -100, 'militaryMetal');
-        militaryMetal.scale.x = .5;
-        militaryMetal.scale.y = .5;
-        militaryMetal.anchor.setTo(.5, .5);
-        tween1 = game.add.tween(militaryMetal).to({ y: 200 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);        
+        militaryMetal = game.add.sprite(GX.educationalIconX, -250, 'militaryMetal');
+        militaryMetal.scale.x = GX.educationalIconScale;
+        militaryMetal.scale.y = GX.educationalIconScale;
+        game.add.tween(militaryMetal).to({ y: 200 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);        
+        game.add.tween(militaryMetal).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 19000);
 
 
-
-        pacifier = game.add.sprite(GX.educationalIconX, 400, 'pacifier');
+        pacifier = game.add.sprite(GX.educationalIconX, 300, 'pacifier');
         pacifier.alpha = 0;
-        pacifier.scale.x = .0;
-        pacifier.scale.y = .0;
+        pacifier.scale.x = GX.educationalIconScale;
+        pacifier.scale.y = GX.educationalIconScale;
         pacifier.anchor.setTo(.5, .5);
         game.add.tween(pacifier).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000);
         game.add.tween(pacifier.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
+        game.add.tween(pacifier).to({ y: 1000 }, 1000, Phaser.Easing.Linear.Out, true, 23000);        
 
 
-        gradBooks = game.add.sprite(GX.educationalIconX, 600, 'gradBooks');
+
+        gradBooks = game.add.sprite(GX.educationalIconX, 300, 'gradBooks');
         gradBooks.alpha = 0;
-        gradBooks.scale.x = .0;
-        gradBooks.scale.y = .0;
+        gradBooks.scale.x = GX.educationalIconScale;
+        gradBooks.scale.y = GX.educationalIconScale;
         gradBooks.anchor.setTo(.5, .5);
         game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000);
         game.add.tween(gradBooks.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 24000);
+        //game.add.tween(gradBooks).to({ y: -250 }, 1000, Phaser.Easing.Linear.Out, true, 23000);        
 
-        calendar = game.add.sprite(-150, 600, 'calendar');
-        calendar.scale.x = .5;
-        calendar.scale.y = .5;
+        
+
+        calendar = game.add.sprite(-250, 300, 'calendar');
+        calendar.scale.x = GX.educationalIconScale;
+        calendar.scale.y = GX.educationalIconScale;
         calendar.anchor.setTo(.5, .5);
-        game.add.tween(calendar).to({ x: 700 }, 1000, Phaser.Easing.Bounce.Out, true, 28000);
+        game.add.tween(calendar).to({ x: GX.educationalIconX }, 1000, Phaser.Easing.Bounce.Out, true, 28000);
+        game.add.tween(calendar).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 31000);
 
 
 
@@ -423,6 +429,11 @@ GX.testState.prototype = {
         if (oddeven == 1)
         { rotation = -720; }
         game.add.tween(gradBooks).to({ angle: rotation }, 800, Phaser.Easing.Cubic.Out, true, 24000);
+        game.add.tween(gradBooks).to({ y: -250 }, 1000, Phaser.Easing.Linear.Out, true, 27000);        
+
+
+
+
 
         text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_0, GX.styleQuestion);
         text0.lineSpacing = GX.questionSpacing;
@@ -596,6 +607,10 @@ GX.testState.prototype = {
         ben.add(heads);
         ben.add(eyes);
         ben.add(body);
+
+        ben.alpha = 0;
+        game.add.tween(ben).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 200);
+
 
         game.add.tween(ben).to({ x: -300 }, 300, Phaser.Easing.Quadratic.Out, true, 15500);
 
