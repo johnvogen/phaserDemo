@@ -77,6 +77,8 @@
     characterOffsetYFallin: -500,
     characterScaleX: .70,
     characterScaleY: .70,
+    intro_characterScaleX: .5,
+    intro_characterScaleY: .5,
     controlScaleX: .6,
     controlScaleY: .6,
     xOffset: 50,
@@ -117,7 +119,7 @@ GX.bootState.prototype = {
 
     create: function () {
         //game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.state.start('test');
+        game.state.start('intro');
     }
 }
 
@@ -261,12 +263,16 @@ GX.introState.prototype = {
             // Add a simple bounce tween to each character's position.
             game.add.tween(sketch).to({ y: 350 }, 3400, Phaser.Easing.Bounce.Out, true, 400 * i, 0);
 
+
+
+
             // Add another rotation tween to the same character.
             var oddeven = (Math.floor(Math.random() * 2) + 1);
             var rotation = 720;
             if (oddeven == 1)
             { rotation = -720; }
             game.add.tween(sketch).to({ angle: rotation }, Math.floor(Math.random() * 3300) + 900 - i * 500, Phaser.Easing.Cubic.In, true, 1000 + 400 * i, 0);
+
         }
 
         // End Text Sequence
@@ -304,11 +310,13 @@ GX.introState.prototype = {
         timer.add(13400, function () {
             tween = game.add.tween(title.scale).to({ x: 1.5, y: 1.5 }, 800, Phaser.Easing.Linear.None, true, 200);
             tween = game.add.tween(title.position).to({ x: (title.position.x - title.width) / 2, y: (title.position.y - title.height) / 2 }, 800, Phaser.Easing.Linear.None, true, 200);
+            //tween = game.add.tween(title.position).to({ x: (title.position.x - title.width) , y: (title.position.y - title.height)  }, 800, Phaser.Easing.Linear.None, true, 200);
+
         }, this);
 
-        timer.add(15500, function () {
-            tween = game.add.tween(title).to({ x: 3000 }, 1000, Phaser.Easing.Cubic.Out, true, 200);
-        }, this);
+        //timer.add(15500, function () {
+        //    tween = game.add.tween(title).to({ x: 3000 }, 1000, Phaser.Easing.Cubic.Out, true, 200);
+        //}, this);
 
         timer.start();
 
@@ -354,14 +362,51 @@ GX.testState.prototype = {
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
-        game.load.json('viseme', 'data/edu_intro.json');
-        game.load.audio('intro', 'mp3/edu_intro.mp3');
+        game.load.image('books', 'png/educational/Books.png');
+        game.load.image('calendar', 'png/educational/Calendar.png');
+        game.load.image('gradBooks', 'png/educational/Gradhat-Books.png');
+        game.load.image('grad', 'png/educational/Gradhat.png');
+        game.load.image('pacifier', 'png/educational/Pacifier.png');
+
+        game.load.json('viseme', 'data/edu_intro2.json');
+        game.load.audio('intro', 'mp3/edu_intro2.mp3');
 
 
     },
 
     create: function () {
         //game.world.alpha = 0;
+
+        books = game.add.sprite(950, -100, 'books');
+        books.scale.x = .5;
+        books.scale.y = .5;
+        books.anchor.setTo(.5, .5);
+        game.add.tween(books).to({ y: 245 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);
+
+        calendar = game.add.sprite(950, 400, 'calendar');
+        calendar.alpha = 0;
+        calendar.scale.x = .0;
+        calendar.scale.y = .0;
+        calendar.anchor.setTo(.5, .5);
+        game.add.tween(calendar).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000);
+        game.add.tween(calendar.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
+
+        gradBooks = game.add.sprite(950, 600, 'gradBooks');
+        gradBooks.alpha = 0;
+        gradBooks.scale.x = .0;
+        gradBooks.scale.y = .0;
+        gradBooks.anchor.setTo(.5, .5);
+        game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000);
+        game.add.tween(gradBooks.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 24000);
+
+        // Add another rotation tween to the same character.
+        var oddeven = (Math.floor(Math.random() * 2) + 1);
+        var rotation = 720;
+        if (oddeven == 1)
+        { rotation = -720; }
+        game.add.tween(gradBooks).to({ angle: rotation },800, Phaser.Easing.Cubic.Out, true, 24000);
+
+
         text1 = game.add.text(game.world.centerX - GX.xOffset2, 100, GX.text0_1, GX.styleAnswer);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text0_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text0_3, GX.styleAnswer);
@@ -374,22 +419,33 @@ GX.testState.prototype = {
         text1.events.onInputUp.add(proceedTo);
         text1.lineSpacing = GX.answerSpacing;
         text1.alpha = 0;
+        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 10000);
+
+        
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed);
         text2.lineSpacing = GX.answerSpacing;
+        text2.alpha = 0;
+        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 15000);
 
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
         text3.lineSpacing = GX.answerSpacing;
+        text3.alpha = 0;
+        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 18000);
 
         text4.inputEnabled = true;
         text4.events.onInputUp.add(proceed);
         text4.lineSpacing = GX.answerSpacing;
+        text4.alpha = 0;
+        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 25000);
 
         text5.inputEnabled = true;
         text5.events.onInputUp.add(proceed);
         text5.lineSpacing = GX.answerSpacing;
+        text5.alpha = 0;
+        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 28000);
 
         text1.events.onInputOver.add(function () {
             console.log("Hover over");
@@ -518,6 +574,9 @@ GX.testState.prototype = {
         ben.add(eyes);
         ben.add(body);
 
+ 
+
+
         //game.add.tween(ben).to({ y: 450 }, 4000, Phaser.Easing.Bounce.Out, true);
         //ben.pivot.x = ben.width*-.25;
         //ben.pivot.y = ben.height * -.25;
@@ -570,6 +629,8 @@ GX.testState.prototype = {
             { timeline[i].body = 0; }
         }
 
+        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
+
         //addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
         //addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
         //addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 400, clipduration, 150);
@@ -578,7 +639,9 @@ GX.testState.prototype = {
 
 
         // Scale sprite group to 55%
-        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
+
+
+
         //console.log(timeline);
 
         // Start the show
@@ -601,9 +664,9 @@ GX.testState.prototype = {
             body.frame = timeline[tick].body;
         }
 
-        if (timer.ms > 3000) {
-            text1.alpha = 1;
-        }
+        //if (timer.ms > 3000) {
+        //    text1.alpha = 1;
+        //}
 
 
     },
@@ -632,8 +695,8 @@ GX.educationalState.prototype = {
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
-        game.load.json('viseme', 'data/edu_intro.json');
-        game.load.audio('intro', 'mp3/edu_intro.mp3');
+        game.load.json('viseme', 'data/edu_intro2.json');
+        game.load.audio('intro', 'mp3/edu_intro2.mp3');
 
 
     },
@@ -1222,7 +1285,7 @@ GX.question1State.prototype = {
         });
         ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
-        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation , GX.ctlY, 'controls');
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
         ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
@@ -1234,7 +1297,7 @@ GX.question1State.prototype = {
         ctlBack.frame = 2;
         ctlBack.inputEnabled = true;
         ctlBack.events.onInputUp.add(function () {
-            goBack();         
+            goBack();
         });
         ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
@@ -1311,7 +1374,11 @@ GX.question1State.prototype = {
         addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
         addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 400, clipduration, 150);
         addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 1000, clipduration, 200);
-        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2500, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2200, clipduration, 10);
+
+        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 5000, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 4500, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armsout", "gesture"), 6500, clipduration, 300);
 
 
         // Scale sprite group to 55%
@@ -1340,10 +1407,10 @@ GX.question1State.prototype = {
     },
 
     render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 };
 
@@ -1469,7 +1536,7 @@ GX.question2State.prototype = {
         ctlBack.frame = 2;
         ctlBack.inputEnabled = true;
         ctlBack.events.onInputUp.add(function () {
-            goBack(); 
+            goBack();
         });
         ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
@@ -1747,6 +1814,13 @@ GX.question3State.prototype = {
         }
         //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
 
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 400, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 2100, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2900, clipduration, 15);
+        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 3700, clipduration, 10);
+
+
+
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
         console.log(timeline);
@@ -1770,10 +1844,10 @@ GX.question3State.prototype = {
     },
 
     render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 
 };
@@ -1947,6 +2021,13 @@ GX.question4State.prototype = {
             { timeline[i].body = 0; }
         }
         //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
+
+        addgesture(getByValue(GX.gestures, "armsout", "gesture"), 50, clipduration, 100);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 600, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 800, clipduration, 200);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 1000, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 1900, clipduration, 300);
+
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
@@ -2133,7 +2214,17 @@ GX.question5State.prototype = {
         for (i = 0; i < clipduration; i++) {
             { timeline[i].body = 0; }
         }
+
+
         //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 50, clipduration, 200);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 500, clipduration, 20);
+
+        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 1500, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "armraise1_leftChest", "gesture"), 2000, clipduration, 200);
+
+
+
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
@@ -2321,6 +2412,16 @@ GX.question6State.prototype = {
             { timeline[i].body = 0; }
         }
         //addgesture(getByValue(GX.gestures, "sway2", "gesture"), 500, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "idea", "gesture"), 10, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "please", "gesture"), 330, clipduration, 100);
+
+        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 700, clipduration, 400);
+
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 1600, clipduration, 200);
+        addgesture(getByValue(GX.gestures, "fistpump", "gesture"), 2100, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "armsout", "gesture"), 2450, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "armsup", "gesture"), 3150, clipduration, 1050);
+
 
         // Scale sprite group to 55%
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
@@ -2362,9 +2463,11 @@ function getByValue(arr, value, mykey) {
 function proceed(item) {
     audiotrack.destroy();
     if (game.state.current == "intro") {
-        game.state.start('educational');
-    } else if (game.state.current == "educational") {
-        game.state.start('question1');
+        game.state.start('test');
+    } else if (game.state.current == "test") {
+        game.state.start('');
+    }else if (game.state.current == "educational") {
+        game.state.start('');
     } else if (game.state.current == "question1") {
         game.state.start('question2');
     } else if (game.state.current == "question2") {
@@ -2428,7 +2531,7 @@ function goBack() {
             break;
         default:
             alert("No previous state");
-    }  
+    }
 
 }
 
@@ -2468,7 +2571,7 @@ function replay() {
             break;
         default:
             alert("No previous state");
-    }  
+    }
 }
 
 function addgesture(obj, position, clipduration, rep) {
@@ -2506,7 +2609,7 @@ window.onload = function () {
     };
 
     function createText() {
-    
+
     }
 
     game.state.add('boot', GX.bootState);
@@ -2520,5 +2623,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('boot');
+    game.state.start('test');
 };
