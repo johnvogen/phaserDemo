@@ -1,4 +1,5 @@
 ﻿var GX = {
+    text0_0: "Leaves of Absence:",
     text0_1: "Medical",
     text0_2: "Military",
     text0_3: "Pregnancy",
@@ -93,7 +94,8 @@
     styleAnswerOut: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
     questionSpacing: -10,
     answerSpacing: -10,
-    textDMZ: 20
+    textDMZ: 20,
+    educationalIconX: 1030
 
 };
 
@@ -107,6 +109,7 @@ var body;
 var ben;
 var clipduration;
 
+var text0;
 var text1;
 var text2;
 var text3;
@@ -377,13 +380,13 @@ GX.testState.prototype = {
     create: function () {
         //game.world.alpha = 0;
 
-        books = game.add.sprite(950, -100, 'books');
+        books = game.add.sprite(GX.educationalIconX, -100, 'books');
         books.scale.x = .5;
         books.scale.y = .5;
         books.anchor.setTo(.5, .5);
         game.add.tween(books).to({ y: 245 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);
 
-        calendar = game.add.sprite(950, 400, 'calendar');
+        calendar = game.add.sprite(GX.educationalIconX, 400, 'pacifier');
         calendar.alpha = 0;
         calendar.scale.x = .0;
         calendar.scale.y = .0;
@@ -391,7 +394,7 @@ GX.testState.prototype = {
         game.add.tween(calendar).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000);
         game.add.tween(calendar.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
 
-        gradBooks = game.add.sprite(950, 600, 'gradBooks');
+        gradBooks = game.add.sprite(GX.educationalIconX, 600, 'gradBooks');
         gradBooks.alpha = 0;
         gradBooks.scale.x = .0;
         gradBooks.scale.y = .0;
@@ -404,10 +407,15 @@ GX.testState.prototype = {
         var rotation = 720;
         if (oddeven == 1)
         { rotation = -720; }
-        game.add.tween(gradBooks).to({ angle: rotation },800, Phaser.Easing.Cubic.Out, true, 24000);
+        game.add.tween(gradBooks).to({ angle: rotation }, 800, Phaser.Easing.Cubic.Out, true, 24000);
+
+        text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_0, GX.styleQuestion);
+        text0.lineSpacing = GX.questionSpacing;
+        text0.alpha = 0;
+        game.add.tween(text0).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 9000);
 
 
-        text1 = game.add.text(game.world.centerX - GX.xOffset2, 100, GX.text0_1, GX.styleAnswer);
+        text1 = game.add.text(game.world.centerX - GX.xOffset2, text0.position.y + text0.texture.height + GX.textDMZ, GX.text0_1, GX.styleAnswer);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text0_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text0_3, GX.styleAnswer);
         text4 = game.add.text(game.world.centerX - GX.xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text0_4, GX.styleAnswer);
@@ -419,7 +427,7 @@ GX.testState.prototype = {
         text1.events.onInputUp.add(proceedTo);
         text1.lineSpacing = GX.answerSpacing;
         text1.alpha = 0;
-        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 10000);
+        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 12000);
 
         
 
@@ -427,25 +435,25 @@ GX.testState.prototype = {
         text2.events.onInputUp.add(proceed);
         text2.lineSpacing = GX.answerSpacing;
         text2.alpha = 0;
-        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 15000);
+        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 15500);
 
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
         text3.lineSpacing = GX.answerSpacing;
         text3.alpha = 0;
-        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 18000);
+        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 19500);
 
         text4.inputEnabled = true;
         text4.events.onInputUp.add(proceed);
         text4.lineSpacing = GX.answerSpacing;
         text4.alpha = 0;
-        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 25000);
+        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 23500);
 
         text5.inputEnabled = true;
         text5.events.onInputUp.add(proceed);
         text5.lineSpacing = GX.answerSpacing;
         text5.alpha = 0;
-        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 28000);
+        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 27500);
 
         text1.events.onInputOver.add(function () {
             console.log("Hover over");
@@ -2501,9 +2509,17 @@ function goBack() {
             audiotrack.destroy();
             game.state.start('intro');
             break;
+        case "test":
+            audiotrack.destroy();
+            game.state.start('intro');
+            break;
         case "educational":
             audiotrack.destroy();
             game.state.start('intro');
+            break;
+        case "educationalMedical":
+            audiotrack.destroy();
+            game.state.start('test');
             break;
         case "question1":
             audiotrack.destroy();
@@ -2540,6 +2556,10 @@ function replay() {
         case "intro":
             audiotrack.destroy();
             game.state.start('intro');
+            break;
+        case "test":
+            audiotrack.destroy();
+            game.state.start('test');
             break;
         case "educational":
             audiotrack.destroy();
