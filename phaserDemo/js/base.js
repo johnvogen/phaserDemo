@@ -89,16 +89,16 @@
     ctlX: 64,
     ctlY: 20,
     ctlSeperation: 50,
-    //styleQuestion: { font: "30px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
-    styleQuestion: { font: "40px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 650 },
-    styleAnswer: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
-    styleAnswerOver: { font: "36px Boogaloo", fill: "#ed1c24", wordWrap: true, wordWrapWidth: 600 },
-    styleAnswerOut: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600 },
+    styleQuestion: { font: "40px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 650, backgroundColor: "#ffffff" },
+    styleAnswer: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600, backgroundColor: "#ffffff" },
+    styleAnswerOver: { font: "36px Boogaloo", fill: "#ed1c24", wordWrap: true, wordWrapWidth: 600, backgroundColor: "#ffffff" },
+    styleAnswerOut: { font: "36px Boogaloo", fill: "#000000", wordWrap: true, wordWrapWidth: 600, backgroundColor: "#ffffff" },
     questionSpacing: -10,
     answerSpacing: -10,
     textDMZ: 20,
     educationalIconX: 900,
-    educationalIconScale: 1
+    educationalIconScale: 1,
+    backgroundY: 130
 
 };
 
@@ -381,11 +381,15 @@ GX.testState.prototype = {
         game.load.json('viseme', 'data/edu_intro3.json');
         game.load.audio('intro', 'mp3/edu_intro3.mp3');
 
+        game.load.image('background', 'png/background.png');
+
 
     },
 
     create: function () {
         //game.world.alpha = 0;
+        game.add.sprite(0, GX.backgroundY, 'background');
+
 
         fx = game.add.audio('soundFx1');
 
@@ -744,11 +748,17 @@ GX.educationalState.prototype = {
         game.load.json('viseme', 'data/edu_intro2.json');
         game.load.audio('intro', 'mp3/edu_intro2.mp3');
 
+        game.load.image('background', 'png/background.png');
+
+
 
     },
 
     create: function () {
         //game.world.alpha = 0;
+
+        game.add.sprite(0, GX.backgroundY, 'background');
+
         text1 = game.add.text(game.world.centerX - GX.xOffset2, 100, GX.text0_1, GX.styleAnswer);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text0_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text0_3, GX.styleAnswer);
@@ -1015,6 +1025,8 @@ GX.educationalMedicalState.prototype = {
         game.load.json('viseme', 'data/leave_types.json');
         game.load.audio('intro', 'mp3/leave_types.mp3');
 
+        game.load.image('background', 'png/background.png');
+
 
     },
 
@@ -1024,7 +1036,8 @@ GX.educationalMedicalState.prototype = {
        
         
         //text0.alpha = 0;
-        
+        game.add.sprite(0, GX.backgroundY, 'background');
+
 
         text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_medical_0, GX.styleQuestion);
         text1 = game.add.text(game.world.centerX - GX.xOffset2, text0.position.y + text0.texture.height + GX.textDMZ, GX.text0_medical_1, GX.styleAnswer);
@@ -1292,7 +1305,7 @@ GX.question1State.prototype = {
     create: function () {
         //game.world.alpha = 0;
 
-        game.add.sprite(0, 130, 'background');
+        game.add.sprite(0, GX.backgroundY, 'background');
 
 
         text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text1_1, GX.styleQuestion);
@@ -1520,9 +1533,14 @@ GX.question2State.prototype = {
         //game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.json');
         //game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/567956bb-ff6a-4601-bae8-b16e147411ae.mp3 ');
 
+        game.load.image('background', 'png/background.png');
+
     },
 
     create: function () {
+
+        game.add.sprite(0, GX.backgroundY, 'background');
+
         text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text2_1, GX.styleQuestion);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text2_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text2_3, GX.styleAnswer);
@@ -1747,9 +1765,15 @@ GX.question3State.prototype = {
         game.load.audio('intro', 'mp3/c93264be-bb36-4443-b294-19dafca8bdbb.mp3');
         //game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/c93264be-bb36-4443-b294-19dafca8bdbb.json');
         //game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/c93264be-bb36-4443-b294-19dafca8bdbb.mp3 ');
+
+        game.load.image('background', 'png/background.png');
     },
 
     create: function () {
+
+        game.add.sprite(0, GX.backgroundY, 'background');
+
+
         text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text3_1, GX.styleQuestion);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text3_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text3_3, GX.styleAnswer);
@@ -1941,9 +1965,14 @@ GX.question4State.prototype = {
         //game.load.audio('intro', 'mp3/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.mp3');
         game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.json');
         game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/15ec71d6-9504-43f7-8e5b-4b47c8e8403c.mp3');
+
+        game.load.image('background', 'png/background.png');
     },
 
     create: function () {
+
+        game.add.sprite(0, GX.backgroundY, 'background');
+
         text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text4_1, GX.styleQuestion);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text4_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text4_3, GX.styleAnswer);
@@ -2149,9 +2178,13 @@ GX.question5State.prototype = {
         //game.load.audio('intro', 'mp3/828a49af-eae5-4f82-9279-a7bbb51d2f01.mp3');
         game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/828a49af-eae5-4f82-9279-a7bbb51d2f01.json');
         game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/828a49af-eae5-4f82-9279-a7bbb51d2f01.mp3');
+        game.load.image('background', 'png/background.png');
     },
 
     create: function () {
+
+        game.add.sprite(0, GX.backgroundY, 'background');
+
         text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text5_1, GX.styleQuestion);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text5_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text5_3, GX.styleAnswer);
@@ -2346,9 +2379,12 @@ GX.question6State.prototype = {
         //game.load.audio('intro', 'mp3/9331fbbc-d5b0-48ae-9705-334273bb50c5.mp3');
         game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/9331fbbc-d5b0-48ae-9705-334273bb50c5.json');
         game.load.audio('intro', 'https://s3.amazonaws.com/audioposts27/9331fbbc-d5b0-48ae-9705-334273bb50c5.mp3');
+        game.load.image('background', 'png/background.png');
     },
 
     create: function () {
+        game.add.sprite(0, GX.backgroundY, 'background');
+
         text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text6_1, GX.styleQuestion);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text6_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text6_3, GX.styleAnswer);
