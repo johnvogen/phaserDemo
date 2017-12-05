@@ -6,6 +6,7 @@
     text0_4: "Education",
     text0_5: "Personal",
 
+    text0_medical_0: "Types of Medical Leave:",
     text0_medical_1: "Paid Medical Leave",
     text0_medical_2: "Unpaid Medical",
     text0_medical_3: "State Disability Leave",
@@ -74,7 +75,7 @@
         { gesture: "wave", frames: [11, 12, 13, 14, 15, 16, 17, 16, 15, 14, 15, 16, 17, 16, 15, 14, 13, 12, 11] }
     ],
     characterOffsetX: 0,
-    educationalCharacterOffsetX: 380,
+    educationalCharacterOffsetX: 400,
     characterOffsetY: 130,
     characterOffsetYFallin: -500,
     characterScaleX: .70,
@@ -319,9 +320,9 @@ GX.introState.prototype = {
 
         }, this);
 
-        //timer.add(15500, function () {
-        //    tween = game.add.tween(title).to({ x: 3000 }, 1000, Phaser.Easing.Cubic.Out, true, 200);
-        //}, this);
+        timer.add(15500, function () {
+            tween = game.add.tween(title).to({ x: 3000 }, 1000, Phaser.Easing.Cubic.Out, true, 200);
+        }, this);
 
         timer.start();
 
@@ -388,20 +389,20 @@ GX.testState.prototype = {
 
         fx = game.add.audio('soundFx1');
 
-        militaryMetal = game.add.sprite(GX.educationalIconX, -350, 'militaryMetal');
-        militaryMetal.scale.x = GX.educationalIconScale;
-        militaryMetal.scale.y = GX.educationalIconScale;
-        game.add.tween(militaryMetal).to({ y: 200 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);        
+        militaryMetal = game.add.sprite(GX.educationalIconX -80, -450, 'militaryMetal');
+        militaryMetal.scale.x = GX.educationalIconScale + .4;
+        militaryMetal.scale.y = GX.educationalIconScale + .4;
+        game.add.tween(militaryMetal).to({ y: 140 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);        
         game.add.tween(militaryMetal).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 19000);
 
 
-        pacifier = game.add.sprite(GX.educationalIconX, 300, 'pacifier');
+        pacifier = game.add.sprite(GX.educationalIconX, 330, 'pacifier');
         pacifier.alpha = 0;
         pacifier.scale.x = GX.educationalIconScale;
         pacifier.scale.y = GX.educationalIconScale;
         pacifier.anchor.setTo(.5, .5);
         game.add.tween(pacifier).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000);
-        game.add.tween(pacifier.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
+        game.add.tween(pacifier.scale).to({ x: .8, y: .8 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
         game.add.tween(pacifier).to({ y: 1000 }, 1000, Phaser.Easing.Linear.Out, true, 23000);        
 
 
@@ -412,7 +413,7 @@ GX.testState.prototype = {
         gradBooks.scale.y = GX.educationalIconScale;
         gradBooks.anchor.setTo(.5, .5);
         game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000);
-        game.add.tween(gradBooks.scale).to({ x: .5, y: .5 }, 800, Phaser.Easing.Bounce.Out, true, 24000);
+        //game.add.tween(gradBooks.scale).to({ x: 1, y: 1 }, 800, Phaser.Easing.Bounce.Out, true, 24000);
         //game.add.tween(gradBooks).to({ y: -250 }, 1000, Phaser.Easing.Linear.Out, true, 23000);        
 
         
@@ -1019,11 +1020,26 @@ GX.educationalMedicalState.prototype = {
 
     create: function () {
         //game.world.alpha = 0;
-        text1 = game.add.text(game.world.centerX - GX.xOffset2, 100, GX.text0_medical_1, GX.styleAnswer);
+
+       
+        
+        //text0.alpha = 0;
+        
+
+        text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_medical_0, GX.styleQuestion);
+        text1 = game.add.text(game.world.centerX - GX.xOffset2, text0.position.y + text0.texture.height + GX.textDMZ, GX.text0_medical_1, GX.styleAnswer);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text0_medical_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text0_medical_3, GX.styleAnswer);
         text4 = game.add.text(game.world.centerX - GX.xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text0_medical_4, GX.styleAnswer);
 
+        text0.alpha = 0;
+        text1.alpha = 0;
+        text2.alpha = 0;
+        text3.alpha = 0;
+        text4.alpha = 0;
+
+
+        text0.lineSpacing = GX.questionSpacing;
         text1.lineSpacing = GX.questionSpacing;
 
         text1.inputEnabled = true;
@@ -1083,6 +1099,14 @@ GX.educationalMedicalState.prototype = {
             this.game.canvas.style.cursor = "default";
             text4.setStyle(GX.styleAnswerOut);
         }, this);
+
+        game.add.tween(text0).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 1000);
+        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 12100);
+        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 17000);
+        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 25000);
+        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 35500);
+
+
 
         var prior_vtime = 999;
         var duration = 0;
@@ -1256,6 +1280,8 @@ GX.question1State.prototype = {
         game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
         game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
 
+        game.load.image('background', 'png/background.png');
+
         //game.load.json('viseme', 'data/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
         //game.load.audio('intro', 'mp3/d81247a6-d59e-4cca-90c6-c2109d13ec7b.mp3');
         game.load.json('viseme', 'https://s3.amazonaws.com/audioposts27/d81247a6-d59e-4cca-90c6-c2109d13ec7b.json');
@@ -1265,6 +1291,10 @@ GX.question1State.prototype = {
 
     create: function () {
         //game.world.alpha = 0;
+
+        game.add.sprite(0, 130, 'background');
+
+
         text1 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text1_1, GX.styleQuestion);
         text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text1_2, GX.styleAnswer);
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text1_3, GX.styleAnswer);
@@ -2687,5 +2717,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('boot');
+    game.state.start('test');
 };

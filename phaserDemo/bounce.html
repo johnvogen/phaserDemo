@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>  
+<title>Bounce!</title>
+<script src="js/phaser.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css">
+
+<!-- Javascript -->
+<script type="text/javascript">
+
+function getByValue(arr, value,mykey) {
+  for (var i=0, iLen=arr.length; i<iLen; i++) {
+    if (arr[i][mykey] === value) return arr[i];
+  }
+}
+
+ var vframes =[
+    {viseme:"p",frame:9},
+    {viseme:"t",frame:6},
+    {viseme:"T",frame:11},
+    {viseme:"f",frame:8},
+    {viseme:"k",frame:6},
+    {viseme:"i",frame:4},
+    {viseme:"r",frame:6},
+    {viseme:"u",frame:11},
+    {viseme:"s",frame:6},
+    {viseme:"S",frame:0},
+    {viseme:"@",frame:2},
+    {viseme:"a",frame:4},
+    {viseme:"o",frame:1},
+    {viseme:"O",frame:2},
+    {viseme:"E",frame:6},
+    {viseme:"e",frame:5},
+    {viseme:"sil",frame:10},
+    ];
+
+var gestures=[
+    {gesture:"waving",frames:[9,14,17,20,17,14,9]},
+];
+
+var vtype;
+var vtime;
+var vvalue;
+var timeline={};
+var head;
+var eyes;
+var body;
+var ben;
+var clipduration;
+
+var game = new Phaser.Game(1280, 720, Phaser.AUTO, 'phaser-example', { 
+    preload: preload, create: create, update: update});
+
+function preload() {
+
+    game.load.spritesheet('heads','heads.png',297,354,12);
+    game.load.spritesheet('eyes','eyes.png',106,128,11);
+    game.load.spritesheet('bodies','spritesheet.png',793,822,20);
+
+    game.load.spritesheet('shadow', 'shadow.png', 138, 15);
+    game.load.spritesheet('direct', 'direct.png', 88, 98);
+    game.load.spritesheet('sketch', 'sketch.png', 98, 108);
+
+    game.load.json('viseme', 'oh_hi.json');
+    game.load.audio('intro', 'oh_hi.mp3');
+}
+
+function create() {
+    title=game.add.group();
+    titledirect=game.add.group();
+    titlesketch=game.add.group();
+    var direct;
+    var shadow;
+    var tween;
+
+    var prior_vtime=999;
+    var duration=0;
+    var count=0;
+    const default_head=10;
+    var prior_vframe=default_head;
+    var i=0;
+
+    // It's visually distracting when the lip frames change too quickly.
+    // set a ms threshold to discard lipsync frames with short durattion
+    const viseme_threshold=0;
+
+    heads=game.add.sprite(2650+465,-790,'heads')
+    eyes=game.add.sprite(2755+465,-705,'eyes');
+    body=game.add.sprite(2399+465,-845,'bodies');
+    heads.frame=default_head;
+
+    ben= game.add.group();
+    ben.add(heads);
+    ben.add(eyes);
+    ben.add(body);
+    ben.scale.setTo(.23,.23);
+
+    // Sets background color to white.
+    game.stage.backgroundColor = '#ffffff';
+    this.game.scale.pageAlignHorizontally = true;
+    this.game.scale.pageAlignVertically = true;
+    this.game.scale.refresh();
+
+        audiotrack = game.add.audio('intro');
+        timer=game.time.create(false);
+ 
+        var gameJSON = game.cache.getJSON('viseme');
+            for (var key in gameJSON)
+            {
+            if (gameJSON.hasOwnProperty(key))
+                {
+                    vtype = gameJSON[key].type;
+                    vtime = gameJSON[key].time;
+                    vvalue = gameJSON[key].value;
+                    if  (count > 0)
+                        {
+                        vframe=getByValue(vframes, vvalue,"viseme").frame;
+                        // determine display duration
+                        duration=vtime-prior_vtime;
+                        // Only display frames with sufficient duration
+                            if (duration > viseme_threshold){
+                                for (i=i; i<Math.round(vtime/10); i++)
+                                    {timeline[i]={"head":prior_vframe};
+                                }
+                                timeline[i]={"head":vframe};
+                            }
+                        prior_vtime=vtime;
+                        prior_vframe=vframe;
+                        }
+                }
+                count++;
+            }
+
+    // Add .20 second of default head position.. This helps account for missed ticks and timing differences between
+    // phaser vs. audio file timing 
+
+      var extension=i+50;
+      for (i=i+1;i<=extension;i++){
+          timeline[i]={"head":default_head};}
+       clipduration=i;
+       // Ends Lipsyncing / clip setup 
+
+       // Start body setup.. default to body 0
+       for (i=0;i<clipduration;i++){
+             {timeline[i].body=0;}
+       }
+
+       //console.log(timeline);
+       addgesture(getByValue(gestures,"waving","gesture"),50,clipduration,13);  // Start pointing at .10 seconds
+
+
+    for (var i = 0; i < 6; i++)
+    {
+        // Add a shadow to the location which characters will land on.
+        // And tween their size to make them look like a real shadow.
+        // Put the following code before items to give shadow a lower
+        // render order.
+        shadow = game.add.sprite(400 + 88 * i, 290, 'shadow');
+
+        // Set shadow's size 0 so that it'll be invisible at the beginning.
+        shadow.scale.setTo(0.0, 0.0);
+
+        // Also set the origin to the center since we don't want to
+        // see the shadow scale to the left top.
+        shadow.anchor.setTo(0.5, 1);
+        game.add.tween(shadow.scale).to({x: 1.0, y: 1.0}, 2400, Phaser.Easing.Bounce.Out, true);
+        title.add(shadow); 
+
+        // Add characters on top of shadows.
+        direct = game.add.sprite(400 + 87 * i, -40, 'direct', i);
+
+        // Set origin to the center to make the rotation look better.
+        direct.anchor.setTo(0.5, 0.5);
+
+        // Add direct to title group
+        title.add(direct);
+       
+        // Add a simple bounce tween to each character's position.
+        tween = game.add.tween(direct).to( { y: 245 }, 2400, Phaser.Easing.Bounce.Out, true);
+
+        //---
+        sketch = game.add.sprite(400 + 87 * i, 1000, 'sketch', i);
+        sketch.anchor.setTo(.5,.5);
+        title.add(sketch);
+
+        // Add a simple bounce tween to each character's position.
+        game.add.tween(sketch).to({y: 350}, 3400, Phaser.Easing.Bounce.Out, true, 400 * i, 0);
+
+        // Add another rotation tween to the same character.
+        var oddeven=(Math.floor(Math.random()*2)+1);
+        var rotation=720;
+        if (oddeven==1)
+            {rotation=-720;}
+             game.add.tween(sketch).to({angle: rotation}, Math.floor(Math.random() * 3300) + 900 - i*500, Phaser.Easing.Cubic.In, true, 1000 + 400 * i, 0);
+    }
+
+        // End Text Sequence
+        game.world.bringToTop(title);
+        timer=game.time.create(false);
+        timer.add(5500,function(){                
+       // Possibly blink eyes every 1/2 second
+            timer.repeat(500,20000,function(){blink(eyes);},this);
+            tween = game.add.tween(ben).to( { y: 219,}, 1200, Phaser.Easing.Bounce.Out, true,1000);
+        },this);
+
+        timer.add(11700,function(){
+             tween = game.add.tween(title).to({x: -250}, 400, Phaser.Easing.Cubic.Out, true, 300);
+        },this);
+
+        timer.add(12000,function(){
+             tween = game.add.tween(ben).to({y: 1000}, 400, Phaser.Easing.Cubic.Out, true, 400);
+        },this);
+
+        // Character raises arms and looks down ready for fall.
+        timer.add(12300,function(){
+             body.frame=16;
+             heads.frame=1;
+             eyes.frame=2;
+        },this);
+
+        timer.add(13000,function(){
+             tween = game.add.tween(title).to({x: 0}, 400, Phaser.Easing.Cubic.Out, true, 200);
+        },this);
+
+        timer.add(8000,function(){
+            audiotrack.play();
+        },this);
+
+        timer.add(13400,function(){
+             tween = game.add.tween(title.scale).to({x:1.5, y: 1.5}, 800, Phaser.Easing.Linear.None, true, 200);
+             tween = game.add.tween(title.position).to( { x: (title.position.x - title.width)/2, y: (title.position.y - title.height)/2}, 800, Phaser.Easing.Linear.None, true,200); 
+         },this);
+
+        timer.add(15500,function(){
+             tween = game.add.tween(title).to({x: 3000}, 1000, Phaser.Easing.Cubic.Out, true, 200);
+        },this);
+
+        timer.start();
+        
+}
+
+function update() {
+    var tick=Math.round(audiotrack.currentTime/10);
+    if (tick<=clipduration){
+        heads.frame=timeline[tick].head;
+    }
+    if (tick<145){
+        body.frame=timeline[tick].body;
+    }
+
+}
+
+function addgesture(obj,position,clipduration,rep){
+     obj.frames.forEach(function(element){
+         for (i=0;i<rep;i++){
+             timeline[position].body=element;
+             position++;
+         }
+     });
+}
+
+function blink(sprite){
+    // Random number between 0 and 20.
+    var frame=Math.floor(Math.random()*18);
+    // If frame 0-7, then display that frame.
+    if (frame<10)
+        {sprite.frame=frame;} 
+}
+
+
+</script>
+</head>
+<body> 
+    <div id="game"></div>
+</body>
+</html>
