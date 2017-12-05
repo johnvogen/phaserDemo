@@ -377,8 +377,8 @@ GX.testState.prototype = {
 
         game.load.audio('soundFx1', 'sounds/pickup.wav');
 
-        game.load.json('viseme', 'data/edu_intro2.json');
-        game.load.audio('intro', 'mp3/edu_intro2.mp3');
+        game.load.json('viseme', 'data/edu_intro3.json');
+        game.load.audio('intro', 'mp3/edu_intro3.mp3');
 
 
     },
@@ -686,8 +686,8 @@ GX.testState.prototype = {
 
         // Scale sprite group to 55%
 
-        game.time.events.add(15500, playSound, this);
-        game.time.events.add(20000, playSound, this);
+        //game.time.events.add(15500, playSound, this);
+        //game.time.events.add(20000, playSound, this);
 
         //console.log(timeline);
 
@@ -717,11 +717,11 @@ GX.testState.prototype = {
     },
 
     render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
-        game.debug.text('Test State: ', 32, 160);
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        //game.debug.text('Test State: ', 32, 160);
     }
 };
 
@@ -1353,6 +1353,17 @@ GX.question1State.prototype = {
             replay();
         });
         ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlHidden = game.add.sprite(ctlReplay.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlHidden.frame = 3;
+        ctlHidden.alpha = 0;
+        ctlHidden.inputEnabled = true;
+        ctlHidden.events.onInputUp.add(function () {
+            //alert("Hidden");
+            audiotrack.destroy();
+            game.state.start('test');
+        });
+        ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
         //Control Block end
 
 
@@ -1682,10 +1693,10 @@ GX.question2State.prototype = {
     },
 
     render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 
 };
@@ -2495,7 +2506,7 @@ function getByValue(arr, value, mykey) {
 function proceed(item) {
     audiotrack.destroy();
     if (game.state.current == "intro") {
-        game.state.start('test');
+        game.state.start('question1');
     } else if (game.state.current == "test") {
         game.state.start('');
     }else if (game.state.current == "educational") {
@@ -2547,7 +2558,7 @@ function goBack() {
             break;
         case "question1":
             audiotrack.destroy();
-            game.state.start('test');
+            game.state.start('intro');
             break;
         case "question2":
             audiotrack.destroy();
@@ -2676,5 +2687,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('test');
+    game.state.start('question1');
 };
