@@ -97,7 +97,7 @@
     answerSpacing: -10,
     textDMZ: 20,
     educationalIconX: 900,
-    educationalIconScale: .8
+    educationalIconScale: 1
 
 };
 
@@ -375,6 +375,8 @@ GX.testState.prototype = {
         game.load.image('militaryMetal_bronze', 'png/educational/Militarystatue-bronze.png');
         game.load.image('pacifier', 'png/educational/pacifier.png');
 
+        game.load.audio('soundFx1', 'sounds/pickup.wav');
+
         game.load.json('viseme', 'data/edu_intro2.json');
         game.load.audio('intro', 'mp3/edu_intro2.mp3');
 
@@ -384,7 +386,9 @@ GX.testState.prototype = {
     create: function () {
         //game.world.alpha = 0;
 
-        militaryMetal = game.add.sprite(GX.educationalIconX, -250, 'militaryMetal');
+        fx = game.add.audio('soundFx1');
+
+        militaryMetal = game.add.sprite(GX.educationalIconX, -350, 'militaryMetal');
         militaryMetal.scale.x = GX.educationalIconScale;
         militaryMetal.scale.y = GX.educationalIconScale;
         game.add.tween(militaryMetal).to({ y: 200 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);        
@@ -460,25 +464,25 @@ GX.testState.prototype = {
         text2.events.onInputUp.add(proceed);
         text2.lineSpacing = GX.answerSpacing;
         text2.alpha = 0;
-        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32000);
+        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31700);
 
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
         text3.lineSpacing = GX.answerSpacing;
         text3.alpha = 0;
-        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32500);
+        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31900);
 
         text4.inputEnabled = true;
         text4.events.onInputUp.add(proceed);
         text4.lineSpacing = GX.answerSpacing;
         text4.alpha = 0;
-        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 33000);
+        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32100);
 
         text5.inputEnabled = true;
         text5.events.onInputUp.add(proceed);
         text5.lineSpacing = GX.answerSpacing;
         text5.alpha = 0;
-        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 33500);
+        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32300);
 
         text1.events.onInputOver.add(function () {
             console.log("Hover over");
@@ -682,7 +686,8 @@ GX.testState.prototype = {
 
         // Scale sprite group to 55%
 
-
+        game.time.events.add(15500, playSound, this);
+        game.time.events.add(20000, playSound, this);
 
         //console.log(timeline);
 
@@ -699,6 +704,8 @@ GX.testState.prototype = {
 
     },
 
+
+
     update: function () {
         var tick = Math.round(audiotrack.currentTime / 10);
         if (tick <= clipduration) {
@@ -706,19 +713,15 @@ GX.testState.prototype = {
             body.frame = timeline[tick].body;
         }
 
-        //if (timer.ms > 3000) {
-        //    text1.alpha = 1;
-        //}
-
 
     },
 
     render: function () {
-        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
-        //game.debug.text('Test State: ', 32, 160);
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        game.debug.text('Test State: ', 32, 160);
     }
 };
 
@@ -2572,6 +2575,11 @@ function goBack() {
 
 }
 
+function playSound () {
+    fx.play();
+
+}
+
 function replay() {
     switch (game.state.current) {
         case "intro":
@@ -2668,5 +2676,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('boot');
+    game.state.start('test');
 };
