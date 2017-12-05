@@ -98,8 +98,8 @@
     textDMZ: 20,
     educationalIconX: 900,
     educationalIconScale: 1,
-    backgroundY: 130
-
+    backgroundY: 130,
+    globalTimingAdjustment: -800
 };
 
 var vtype;
@@ -353,8 +353,8 @@ GX.introState.prototype = {
     }
 }
 
-GX.testState = function (game) { };
-GX.testState.prototype = {
+GX.educationalState = function (game) { };
+GX.educationalState.prototype = {
 
     init: function () {
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -396,8 +396,8 @@ GX.testState.prototype = {
         militaryMetal = game.add.sprite(GX.educationalIconX -80, -450, 'militaryMetal');
         militaryMetal.scale.x = GX.educationalIconScale + .4;
         militaryMetal.scale.y = GX.educationalIconScale + .4;
-        game.add.tween(militaryMetal).to({ y: 140 }, 1000, Phaser.Easing.Bounce.Out, true, 16000);        
-        game.add.tween(militaryMetal).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 19000);
+        game.add.tween(militaryMetal).to({ y: 120 }, 1000, Phaser.Easing.Bounce.Out, true, 16000 + GX.globalTimingAdjustment);        
+        game.add.tween(militaryMetal).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 19000 + GX.globalTimingAdjustment);
 
 
         pacifier = game.add.sprite(GX.educationalIconX, 330, 'pacifier');
@@ -405,9 +405,9 @@ GX.testState.prototype = {
         pacifier.scale.x = GX.educationalIconScale;
         pacifier.scale.y = GX.educationalIconScale;
         pacifier.anchor.setTo(.5, .5);
-        game.add.tween(pacifier).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000);
-        game.add.tween(pacifier.scale).to({ x: .8, y: .8 }, 800, Phaser.Easing.Bounce.Out, true, 20000);
-        game.add.tween(pacifier).to({ y: 1000 }, 1000, Phaser.Easing.Linear.Out, true, 23000);        
+        game.add.tween(pacifier).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 20000 + GX.globalTimingAdjustment);
+        game.add.tween(pacifier.scale).to({ x: .8, y: .8 }, 800, Phaser.Easing.Bounce.Out, true, 20000 + GX.globalTimingAdjustment);
+        game.add.tween(pacifier).to({ y: 1000 }, 1000, Phaser.Easing.Linear.Out, true, 23000 + GX.globalTimingAdjustment);        
 
 
 
@@ -416,7 +416,7 @@ GX.testState.prototype = {
         gradBooks.scale.x = GX.educationalIconScale;
         gradBooks.scale.y = GX.educationalIconScale;
         gradBooks.anchor.setTo(.5, .5);
-        game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000);
+        game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000 + GX.globalTimingAdjustment);
         //game.add.tween(gradBooks.scale).to({ x: 1, y: 1 }, 800, Phaser.Easing.Bounce.Out, true, 24000);
         //game.add.tween(gradBooks).to({ y: -250 }, 1000, Phaser.Easing.Linear.Out, true, 23000);        
 
@@ -426,7 +426,7 @@ GX.testState.prototype = {
         calendar.scale.x = GX.educationalIconScale;
         calendar.scale.y = GX.educationalIconScale;
         calendar.anchor.setTo(.5, .5);
-        game.add.tween(calendar).to({ x: GX.educationalIconX }, 1000, Phaser.Easing.Bounce.Out, true, 28000);
+        game.add.tween(calendar).to({ x: GX.educationalIconX }, 1000, Phaser.Easing.Bounce.Out, true, 28000 + GX.globalTimingAdjustment);
         game.add.tween(calendar).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 31000);
 
 
@@ -436,8 +436,8 @@ GX.testState.prototype = {
         var rotation = 720;
         if (oddeven == 1)
         { rotation = -720; }
-        game.add.tween(gradBooks).to({ angle: rotation }, 800, Phaser.Easing.Cubic.Out, true, 24000);
-        game.add.tween(gradBooks).to({ y: -250 }, 1000, Phaser.Easing.Linear.Out, true, 27000);        
+        game.add.tween(gradBooks).to({ angle: rotation }, 800, Phaser.Easing.Cubic.Out, true, 24000 + GX.globalTimingAdjustment);
+        game.add.tween(gradBooks).to({ y: -250 }, 1000, Phaser.Easing.Linear.Out, true, 27000 + GX.globalTimingAdjustment);        
 
 
 
@@ -446,7 +446,7 @@ GX.testState.prototype = {
         text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_0, GX.styleQuestion);
         text0.lineSpacing = GX.questionSpacing;
         text0.alpha = 0;
-        game.add.tween(text0).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31000);
+        game.add.tween(text0).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31000 + GX.globalTimingAdjustment);
 
 
         text1 = game.add.text(game.world.centerX - GX.xOffset2, text0.position.y + text0.texture.height + GX.textDMZ, GX.text0_1, GX.styleAnswer);
@@ -461,7 +461,7 @@ GX.testState.prototype = {
         text1.events.onInputUp.add(proceedTo);
         text1.lineSpacing = GX.answerSpacing;
         text1.alpha = 0;
-        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31500);
+        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31500 + GX.globalTimingAdjustment);
 
         
 
@@ -469,25 +469,25 @@ GX.testState.prototype = {
         text2.events.onInputUp.add(proceed);
         text2.lineSpacing = GX.answerSpacing;
         text2.alpha = 0;
-        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31700);
+        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31700 + GX.globalTimingAdjustment);
 
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
         text3.lineSpacing = GX.answerSpacing;
         text3.alpha = 0;
-        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31900);
+        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 31900 + GX.globalTimingAdjustment);
 
         text4.inputEnabled = true;
         text4.events.onInputUp.add(proceed);
         text4.lineSpacing = GX.answerSpacing;
         text4.alpha = 0;
-        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32100);
+        game.add.tween(text4).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32100 + GX.globalTimingAdjustment);
 
         text5.inputEnabled = true;
         text5.events.onInputUp.add(proceed);
         text5.lineSpacing = GX.answerSpacing;
         text5.alpha = 0;
-        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32300);
+        game.add.tween(text5).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 32300 + GX.globalTimingAdjustment);
 
         text1.events.onInputOver.add(function () {
             console.log("Hover over");
@@ -620,7 +620,7 @@ GX.testState.prototype = {
         game.add.tween(ben).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 200);
 
 
-        game.add.tween(ben).to({ x: -300 }, 300, Phaser.Easing.Quadratic.Out, true, 15500);
+        game.add.tween(ben).to({ x: -300 }, 300, Phaser.Easing.Quadratic.Out, true, 15500 + GX.globalTimingAdjustment);
 
  
 
@@ -680,14 +680,14 @@ GX.testState.prototype = {
         ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
 
         addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 700, clipduration, 150);
-        addgesture(getByValue(GX.gestures, "present1_twoHanded", "gesture"), 1500, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "fistpump", "gesture"), 2050, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2300, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 2700, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 3100, clipduration, 10);
-        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 4000, clipduration, 300);
-        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 5000, clipduration, 150);
+        addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 700 + GX.globalTimingAdjustment / 10, clipduration, 150);
+        addgesture(getByValue(GX.gestures, "present1_twoHanded", "gesture"), 1500 + GX.globalTimingAdjustment / 10, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "fistpump", "gesture"), 2000 + GX.globalTimingAdjustment / 10, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2300 + GX.globalTimingAdjustment / 10, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "present2_oneHanded", "gesture"), 2700 + GX.globalTimingAdjustment / 10, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 3000 + GX.globalTimingAdjustment / 10, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "armcross", "gesture"), 4000 + GX.globalTimingAdjustment / 10, clipduration, 300);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 5000 + GX.globalTimingAdjustment / 10, clipduration, 150);
 
         // Scale sprite group to 55%
 
@@ -727,283 +727,6 @@ GX.testState.prototype = {
         //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
         //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
         //game.debug.text('Test State: ', 32, 160);
-    }
-};
-
-GX.educationalState = function (game) { };
-GX.educationalState.prototype = {
-
-    init: function () {
-        this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    },
-
-    preload: function () {
-
-        game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
-        game.load.spritesheet('heads', 'png/heads.png', 297, 354, 12);
-        game.load.spritesheet('eyes', 'png/eyes.png', 106, 128, 11);
-        game.load.spritesheet('bodies', 'png/bodies2.png', 397, 411, 54);
-        game.load.spritesheet('controls', 'png/controlSpritesheetSmall.png', 51, 51, 4);
-
-        game.load.json('viseme', 'data/edu_intro2.json');
-        game.load.audio('intro', 'mp3/edu_intro2.mp3');
-
-        game.load.image('background', 'png/background.png');
-
-
-
-    },
-
-    create: function () {
-        //game.world.alpha = 0;
-
-        game.add.sprite(0, GX.backgroundY, 'background');
-
-        text1 = game.add.text(game.world.centerX - GX.xOffset2, 100, GX.text0_1, GX.styleAnswer);
-        text2 = game.add.text(game.world.centerX - GX.xOffset2, text1.position.y + text1.texture.height + GX.textDMZ, GX.text0_2, GX.styleAnswer);
-        text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text0_3, GX.styleAnswer);
-        text4 = game.add.text(game.world.centerX - GX.xOffset2, text3.position.y + text3.texture.height + GX.textDMZ, GX.text0_4, GX.styleAnswer);
-        text5 = game.add.text(game.world.centerX - GX.xOffset2, text4.position.y + text4.texture.height + GX.textDMZ, GX.text0_5, GX.styleAnswer);
-
-        text1.lineSpacing = GX.questionSpacing;
-
-        text1.inputEnabled = true;
-        text1.events.onInputUp.add(proceedTo);
-        text1.lineSpacing = GX.answerSpacing;
-
-        text2.inputEnabled = true;
-        text2.events.onInputUp.add(proceed);
-        text2.lineSpacing = GX.answerSpacing;
-
-        text3.inputEnabled = true;
-        text3.events.onInputUp.add(proceed);
-        text3.lineSpacing = GX.answerSpacing;
-
-        text4.inputEnabled = true;
-        text4.events.onInputUp.add(proceed);
-        text4.lineSpacing = GX.answerSpacing;
-
-        text5.inputEnabled = true;
-        text5.events.onInputUp.add(proceed);
-        text5.lineSpacing = GX.answerSpacing;
-
-        text1.events.onInputOver.add(function () {
-            console.log("Hover over");
-            this.game.canvas.style.cursor = "pointer";
-            text1.setStyle(GX.styleAnswerOver);
-        }, this);
-
-        text1.events.onInputOut.add(function () {
-            this.game.canvas.style.cursor = "default";
-            text1.setStyle(GX.styleAnswerOut);
-        }, this);
-
-        text2.events.onInputOver.add(function () {
-            console.log("Hover over");
-            this.game.canvas.style.cursor = "pointer";
-            text2.setStyle(GX.styleAnswerOver);
-        }, this);
-
-        text2.events.onInputOut.add(function () {
-            this.game.canvas.style.cursor = "default";
-            text2.setStyle(GX.styleAnswerOut);
-        }, this);
-
-        text3.events.onInputOver.add(function () {
-            this.game.canvas.style.cursor = "pointer";
-            text3.setStyle(GX.styleAnswerOver);
-        }, this);
-
-        text3.events.onInputOut.add(function () {
-            this.game.canvas.style.cursor = "default";
-            text3.setStyle(GX.styleAnswerOut);
-        }, this);
-
-        text4.events.onInputOver.add(function () {
-            this.game.canvas.style.cursor = "pointer";
-            text4.setStyle(GX.styleAnswerOver);
-        }, this);
-
-        text4.events.onInputOut.add(function () {
-            this.game.canvas.style.cursor = "default";
-            text4.setStyle(GX.styleAnswerOut);
-        }, this);
-
-        text5.events.onInputOver.add(function () {
-            this.game.canvas.style.cursor = "pointer";
-            text5.setStyle(GX.styleAnswerOver);
-        }, this);
-
-        text5.events.onInputOut.add(function () {
-            this.game.canvas.style.cursor = "default";
-            text5.setStyle(GX.styleAnswerOut);
-        }, this);
-
-        var prior_vtime = 999;
-        var duration = 0;
-        var count = 0;
-        const default_head = 10;
-        var prior_vframe = default_head;
-        var i = 0;
-
-        // It's visually distracting when the lip frames change too quickly.
-        // set a ms threshold to discard lipsync frames with short durattion
-        const viseme_threshold = 35;
-
-        game.stage.backgroundColor = GX.stageColor;
-        heads = game.add.sprite(350 + GX.characterOffsetX, 10 + GX.characterOffsetY, 'heads')
-
-        eyes = game.add.sprite(455 + GX.characterOffsetX, 95 + GX.characterOffsetY, 'eyes');
-
-        body = game.add.sprite(99 + GX.characterOffsetX, -45 + GX.characterOffsetY, 'bodies');
-
-        body.scale.setTo(2, 2);
-
-
-        //Control Block start
-        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
-        ctlHome.frame = 0;
-        ctlHome.inputEnabled = true;
-        ctlHome.events.onInputUp.add(function () {
-            audiotrack.destroy();
-            game.state.start('question1');
-        });
-        ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
-
-        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
-        ctlPause.frame = 1;
-        ctlPause.inputEnabled = true;
-        ctlPause.events.onInputUp.add(function () {
-            game.paused = true; audiotrack.pause();
-        });
-        ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
-
-        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
-        ctlBack.frame = 2;
-        ctlBack.inputEnabled = true;
-        ctlBack.events.onInputUp.add(function () {
-            goBack();
-        });
-        ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
-
-        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
-        ctlReplay.frame = 3;
-        ctlReplay.inputEnabled = true;
-        ctlReplay.events.onInputUp.add(function () {
-            replay();
-        });
-        ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
-
-        var ctlHidden = game.add.sprite(ctlReplay.x + GX.ctlSeperation, GX.ctlY, 'controls');
-        ctlHidden.frame = 3;
-        ctlHidden.alpha = 0;
-        ctlHidden.inputEnabled = true;
-        ctlHidden.events.onInputUp.add(function () {
-            //alert("Hidden");
-            audiotrack.destroy();
-            game.state.start('question1');
-        });
-        ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
-        //Control Block end
-
-
-        // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
-        // individual sprites for moving and scaling the character
-        ben = game.add.group();
-        ben.add(heads);
-        ben.add(eyes);
-        ben.add(body);
-
-        //game.add.tween(ben).to({ y: 450 }, 4000, Phaser.Easing.Bounce.Out, true);
-        //ben.pivot.x = ben.width*-.25;
-        //ben.pivot.y = ben.height * -.25;
-
-        //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true);
-        //game.add.tween(ben.scale).from({ x: .5, y: .5 }, 2000, null, true); game.add.tween(ben.position).from({ x: .5, y: .5 }, 2000, null, true);
-
-        // Set a default head postion for initial postion and after lip sync
-        heads.frame = default_head;
-        eyes.frame = 1;
-
-        audiotrack = game.add.audio('intro');
-        timer = game.time.create(false);
-
-        var gameJSON = game.cache.getJSON('viseme');
-        for (var key in gameJSON) {
-            if (gameJSON.hasOwnProperty(key)) {
-                vtype = gameJSON[key].type;
-                vtime = gameJSON[key].time;
-                vvalue = gameJSON[key].value;
-                if (count > 0) {
-                    vframe = getByValue(GX.vframes, vvalue, "viseme").frame;
-                    // determine display duration
-                    duration = vtime - prior_vtime;
-                    // Only display frames with sufficient duration
-                    if (duration > viseme_threshold) {
-                        for (i = i; i < Math.round(vtime / 10); i++) {
-                            timeline[i] = { "head": prior_vframe };
-                        }
-                        timeline[i] = { "head": vframe };
-                    }
-                    prior_vtime = vtime;
-                    prior_vframe = vframe;
-                }
-            }
-            count++;
-        }
-
-        // Add 1/2 second of default head position.. This helps account for missed ticks and timing differences between
-        // phaser vs. audio file timing 
-        var extension = i + 50;
-        for (i = i + 1; i <= extension; i++) {
-            timeline[i] = { "head": default_head };
-        }
-        clipduration = i;
-        // Ends Lipsyncing / clip setup 
-
-        // Start body setup.. default to body 0
-        for (i = 0; i < clipduration; i++) {
-            { timeline[i].body = 0; }
-        }
-
-        //addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
-        //addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
-        //addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 400, clipduration, 150);
-        //addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 1000, clipduration, 200);
-        //addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2500, clipduration, 10);
-
-
-        // Scale sprite group to 55%
-        ben.scale.setTo(GX.characterScaleX, GX.characterScaleY);
-        //console.log(timeline);
-
-        // Start the show
-        audiotrack.play();
-
-        // Possibly blink eyes every 1/2 second
-        timer.repeat(500, 20000, function () { blink(eyes); }, this);
-        timer.start();
-
-        //game.add.tween(game.world).to({ alpha: 1 }, 1000, "Linear", true);
-
-        game.input.onDown.add(function () { game.paused = false; audiotrack.resume(); }, self);
-
-    },
-
-    update: function () {
-        var tick = Math.round(audiotrack.currentTime / 10);
-        if (tick <= clipduration) {
-            heads.frame = timeline[tick].head;
-            body.frame = timeline[tick].body;
-        }
-    },
-
-    render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
-        game.debug.text('Educational State: ', 32, 160);
     }
 };
 
@@ -1237,11 +960,12 @@ GX.educationalMedicalState.prototype = {
             { timeline[i].body = 0; }
         }
 
-        //addgesture(getByValue(GX.gestures, "walk", "gesture"), 10, clipduration, 20);
-        //addgesture(getByValue(GX.gestures, "wave", "gesture"), 3, clipduration, 10);
-        //addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 400, clipduration, 150);
-        //addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 1000, clipduration, 200);
-        //addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2500, clipduration, 10);
+        
+       // addgesture(getByValue(GX.gestures, "armraise2_rightChest", "gesture"), 1000, clipduration, 200);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 1150, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "point_east", "gesture"), 1650, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 2450, clipduration, 150);
+        addgesture(getByValue(GX.gestures, "hand_east", "gesture"), 3500, clipduration, 150);
 
 
         // Scale sprite group to 55%
@@ -1270,11 +994,11 @@ GX.educationalMedicalState.prototype = {
     },
 
     render: function () {
-        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
-        game.debug.text('Educational Medical: ', 32, 160);
+        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        //game.debug.text('Educational Medical: ', 32, 160);
     }
 };
 
@@ -1404,7 +1128,7 @@ GX.question1State.prototype = {
         ctlHidden.events.onInputUp.add(function () {
             //alert("Hidden");
             audiotrack.destroy();
-            game.state.start('test');
+            game.state.start('educational');
         });
         ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
         //Control Block end
@@ -2573,8 +2297,6 @@ function proceed(item) {
     audiotrack.destroy();
     if (game.state.current == "intro") {
         game.state.start('question1');
-    } else if (game.state.current == "test") {
-        game.state.start('');
     }else if (game.state.current == "educational") {
         game.state.start('');
     } else if (game.state.current == "question1") {
@@ -2610,17 +2332,13 @@ function goBack() {
             audiotrack.destroy();
             game.state.start('intro');
             break;
-        case "test":
-            audiotrack.destroy();
-            game.state.start('intro');
-            break;
         case "educational":
             audiotrack.destroy();
             game.state.start('intro');
             break;
         case "educationalMedical":
             audiotrack.destroy();
-            game.state.start('test');
+            game.state.start('educational');
             break;
         case "question1":
             audiotrack.destroy();
@@ -2662,10 +2380,6 @@ function replay() {
         case "intro":
             audiotrack.destroy();
             game.state.start('intro');
-            break;
-        case "test":
-            audiotrack.destroy();
-            game.state.start('test');
             break;
         case "educational":
             audiotrack.destroy();
@@ -2744,7 +2458,6 @@ window.onload = function () {
 
     game.state.add('boot', GX.bootState);
     game.state.add('intro', GX.introState);
-    game.state.add('test', GX.testState);
     game.state.add('educational', GX.educationalState);
     game.state.add('educationalMedical', GX.educationalMedicalState);
     game.state.add('question1', GX.question1State);
@@ -2753,5 +2466,5 @@ window.onload = function () {
     game.state.add('question4', GX.question4State);
     game.state.add('question5', GX.question5State);
     game.state.add('question6', GX.question6State);
-    game.state.start('test');
+    game.state.start('boot');
 };
