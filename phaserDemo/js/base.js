@@ -441,7 +441,7 @@ GX.educationalState.prototype = {
         calendar.scale.y = GX.educationalIconScale;
         calendar.anchor.setTo(.5, .5);
         game.add.tween(calendar).to({ x: GX.educationalIconX }, 1000, Phaser.Easing.Bounce.Out, true, 28000 + GX.globalTimingAdjustment);
-        game.add.tween(calendar).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 31000);
+        game.add.tween(calendar).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 30000);
 
         text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_0, GX.styleQuestion);
         text0.lineSpacing = GX.questionSpacing;
