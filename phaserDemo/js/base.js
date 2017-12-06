@@ -409,7 +409,7 @@ GX.educationalState.prototype = {
 
         game.load.audio('cry', 'sounds/baby.mp3');
         game.load.audio('bugle', 'sounds/bugle2_5sec.mp3');
-        game.load.audio('gradSong', 'sounds/gradSong.mp3');
+        game.load.audio('gradSong', 'sounds/gradSong3sec.mp3');
         game.load.audio('pageFlip', 'sounds/pageFlip.mp3');
 
 
@@ -463,7 +463,7 @@ GX.educationalState.prototype = {
         gradBooks.scale.y = GX.educationalIconScale;
         gradBooks.anchor.setTo(.5, .5);
         game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000 + GX.globalTimingAdjustment); 
-        game.time.events.add(23700, gradSongFunction, this);
+        game.time.events.add(22800, gradSongFunction, this);
         
 
         var oddeven = (Math.floor(Math.random() * 2) + 1);
@@ -1385,7 +1385,7 @@ GX.question2State.prototype = {
         body.scale.setTo(2, 2);
 
         //Control Block start
-        ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
+        var ctlHome = game.add.sprite(GX.ctlX, GX.ctlY, 'controls');
         ctlHome.frame = 0;
         ctlHome.inputEnabled = true;
         ctlHome.events.onInputUp.add(function () {
@@ -1394,7 +1394,7 @@ GX.question2State.prototype = {
         });
         ctlHome.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
-        ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        var ctlPause = game.add.sprite(ctlHome.x + GX.ctlSeperation, GX.ctlY, 'controls');
         ctlPause.frame = 1;
         ctlPause.inputEnabled = true;
         ctlPause.events.onInputUp.add(function () {
@@ -1402,7 +1402,7 @@ GX.question2State.prototype = {
         });
         ctlPause.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
-        ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        var ctlBack = game.add.sprite(ctlPause.x + GX.ctlSeperation, GX.ctlY, 'controls');
         ctlBack.frame = 2;
         ctlBack.inputEnabled = true;
         ctlBack.events.onInputUp.add(function () {
@@ -1410,13 +1410,24 @@ GX.question2State.prototype = {
         });
         ctlBack.scale.setTo(GX.controlScaleX, GX.controlScaleY);
 
-        ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        var ctlReplay = game.add.sprite(ctlBack.x + GX.ctlSeperation, GX.ctlY, 'controls');
         ctlReplay.frame = 3;
         ctlReplay.inputEnabled = true;
         ctlReplay.events.onInputUp.add(function () {
             replay();
         });
         ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlHidden = game.add.sprite(ctlReplay.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlHidden.frame = 3;
+        ctlHidden.alpha = 0;
+        ctlHidden.inputEnabled = true;
+        ctlHidden.events.onInputUp.add(function () {
+            //alert("Hidden");
+            audiotrack.destroy();
+            game.state.start('educational');
+        });
+        ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
         //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
@@ -1622,6 +1633,17 @@ GX.question3State.prototype = {
             replay();
         });
         ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlHidden = game.add.sprite(ctlReplay.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlHidden.frame = 3;
+        ctlHidden.alpha = 0;
+        ctlHidden.inputEnabled = true;
+        ctlHidden.events.onInputUp.add(function () {
+            //alert("Hidden");
+            audiotrack.destroy();
+            game.state.start('educational');
+        });
+        ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
         //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
@@ -1680,7 +1702,7 @@ GX.question3State.prototype = {
         addgesture(getByValue(GX.gestures, "hand_west", "gesture"), 400, clipduration, 300);
         addgesture(getByValue(GX.gestures, "armcross", "gesture"), 2100, clipduration, 300);
         addgesture(getByValue(GX.gestures, "point_east", "gesture"), 2900, clipduration, 15);
-        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 3700, clipduration, 10);
+        addgesture(getByValue(GX.gestures, "waiting", "gesture"), 3700, clipduration,20);
 
 
 
@@ -1835,6 +1857,17 @@ GX.question4State.prototype = {
             replay();
         });
         ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlHidden = game.add.sprite(ctlReplay.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlHidden.frame = 3;
+        ctlHidden.alpha = 0;
+        ctlHidden.inputEnabled = true;
+        ctlHidden.events.onInputUp.add(function () {
+            //alert("Hidden");
+            audiotrack.destroy();
+            game.state.start('educational');
+        });
+        ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
         //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
@@ -2033,6 +2066,17 @@ GX.question5State.prototype = {
             replay();
         });
         ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlHidden = game.add.sprite(ctlReplay.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlHidden.frame = 3;
+        ctlHidden.alpha = 0;
+        ctlHidden.inputEnabled = true;
+        ctlHidden.events.onInputUp.add(function () {
+            //alert("Hidden");
+            audiotrack.destroy();
+            game.state.start('educational');
+        });
+        ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
         //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
@@ -2233,6 +2277,17 @@ GX.question6State.prototype = {
             replay();
         });
         ctlReplay.scale.setTo(GX.controlScaleX, GX.controlScaleY);
+
+        var ctlHidden = game.add.sprite(ctlReplay.x + GX.ctlSeperation, GX.ctlY, 'controls');
+        ctlHidden.frame = 3;
+        ctlHidden.alpha = 0;
+        ctlHidden.inputEnabled = true;
+        ctlHidden.events.onInputUp.add(function () {
+            //alert("Hidden");
+            audiotrack.destroy();
+            game.state.start('educational');
+        });
+        ctlHidden.scale.setTo(GX.controlScaleX, GX.controlScaleY);
         //Control Block end
 
         // Created a sprite grouo called ben.  Working with a group of sprites is easier than working with 
