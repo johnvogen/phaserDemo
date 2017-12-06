@@ -376,7 +376,7 @@ GX.educationalState.prototype = {
         game.load.image('militaryMetal_bronze', 'png/educational/Militarystatue-bronze.png');
         game.load.image('pacifier', 'png/educational/pacifier.png');
 
-        game.load.audio('cry', 'sounds/slide_whistle_04.mp3');
+        game.load.audio('cry', 'sounds/baby.wav');
         //game.load.audio('cry', 'sounds/pickup.wav');
         //game.load.audio('cry', 'sounds/characterFall.wav');
         //game.load.audio('cry', 'sounds/Swish Lo 1.aiff');
@@ -416,7 +416,7 @@ GX.educationalState.prototype = {
         game.add.tween(pacifier.scale).to({ x: .8, y: .8 }, 800, Phaser.Easing.Bounce.Out, true, 20000 + GX.globalTimingAdjustment);
         game.add.tween(pacifier).to({ y: 1000 }, 1000, Phaser.Easing.Linear.Out, true, 23000 + GX.globalTimingAdjustment);
 
-        //game.time.events.add(2000, cryFunction, this);
+        game.time.events.add(2000, cryFunction, this);
         //game.time.events.add(2000, gradSongFunction, this);
 
         gradBooks = game.add.sprite(GX.educationalIconX, 300, 'gradBooks');
