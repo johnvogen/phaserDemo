@@ -149,9 +149,28 @@ GX.introState.prototype = {
         game.load.json('viseme', 'data/oh_hi.json');
         game.load.audio('intro', 'mp3/oh_hi.mp3');
 
+
+        game.load.audio('swish5', 'sounds/Swish Lo 5.mp3');
+        game.load.audio('swish7', 'sounds/Swish Lo 7.mp3');
+        game.load.audio('fall', 'sounds/characterFall2.mp3');
+
+
+
+
+
     },
 
     create: function () {
+
+        swish5 = game.add.audio('swish5');
+        swish7 = game.add.audio('swish7');
+        fall = game.add.audio('fall');
+
+
+
+
+
+
         title = game.add.group();
         titledirect = game.add.group();
         titlesketch = game.add.group();
@@ -324,6 +343,11 @@ GX.introState.prototype = {
             tween = game.add.tween(title).to({ x: 3000 }, 1000, Phaser.Easing.Cubic.Out, true, 200);
         }, this);
 
+        game.time.events.add(12500, fallFunction, this);
+        game.time.events.add(12000, swish5Function, this);
+        game.time.events.add(13000, swish7Function, this);
+        game.time.events.add(15500, swish7Function, this);
+
         timer.start();
 
     },
@@ -346,10 +370,10 @@ GX.introState.prototype = {
     },
 
     render: function () {
-        //game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
-        //game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
-        //game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
-        //game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
+        game.debug.text('Time until event: ' + timer.duration.toFixed(0), 32, 32);
+        game.debug.text('Time elapsed: ' + timer.ms.toFixed(0), 32, 64);
+        game.debug.text('Audio mark: ' + audiotrack.currentTime.toFixed(0), 32, 96);
+        game.debug.text('AudioTract total duration ' + audiotrack.totalDuration.toFixed(0), 32, 128);
     }
 }
 
@@ -376,10 +400,13 @@ GX.educationalState.prototype = {
         game.load.image('militaryMetal_bronze', 'png/educational/Militarystatue-bronze.png');
         game.load.image('pacifier', 'png/educational/pacifier.png');
 
-        game.load.audio('cry', 'sounds/baby.wav');
-        //game.load.audio('cry', 'sounds/pickup.wav');
-        //game.load.audio('cry', 'sounds/characterFall.wav');
-        //game.load.audio('cry', 'sounds/Swish Lo 1.aiff');
+        game.load.audio('cry', 'sounds/baby.mp3');
+        game.load.audio('bugle', 'sounds/bugle2_5sec.mp3');
+        game.load.audio('gradSong', 'sounds/gradSong.mp3');
+        game.load.audio('baloon', 'sounds/baloonStretch.mp3');
+
+
+
 
         //game.load.audio('gradSong', 'sounds/slide_whistle_04.mp3');
 
@@ -398,6 +425,9 @@ GX.educationalState.prototype = {
 
 
         cry = game.add.audio('cry');
+        bugle = game.add.audio('bugle');
+        gradSong = game.add.audio('gradSong');
+        baloon = game.add.audio('baloon');
 
 
         militaryMetal = game.add.sprite(GX.educationalIconX - 80, -450, 'militaryMetal');
@@ -405,6 +435,7 @@ GX.educationalState.prototype = {
         militaryMetal.scale.y = GX.educationalIconScale + .4;
         game.add.tween(militaryMetal).to({ y: 120 }, 1000, Phaser.Easing.Bounce.Out, true, 16000 + GX.globalTimingAdjustment);
         game.add.tween(militaryMetal).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 19000 + GX.globalTimingAdjustment);
+        game.time.events.add(16000, bugleFunction, this);
 
 
         pacifier = game.add.sprite(GX.educationalIconX, 330, 'pacifier');
@@ -416,8 +447,8 @@ GX.educationalState.prototype = {
         game.add.tween(pacifier.scale).to({ x: .8, y: .8 }, 800, Phaser.Easing.Bounce.Out, true, 20000 + GX.globalTimingAdjustment);
         game.add.tween(pacifier).to({ y: 1000 }, 1000, Phaser.Easing.Linear.Out, true, 23000 + GX.globalTimingAdjustment);
 
-        game.time.events.add(2000, cryFunction, this);
-        //game.time.events.add(2000, gradSongFunction, this);
+        game.time.events.add(20000, cryFunction, this);
+       
 
         gradBooks = game.add.sprite(GX.educationalIconX, 300, 'gradBooks');
         gradBooks.alpha = 0;
@@ -425,7 +456,7 @@ GX.educationalState.prototype = {
         gradBooks.scale.y = GX.educationalIconScale;
         gradBooks.anchor.setTo(.5, .5);
         game.add.tween(gradBooks).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 24000 + GX.globalTimingAdjustment); 
-
+        game.time.events.add(24000, gradSongFunction, this);
         
 
         var oddeven = (Math.floor(Math.random() * 2) + 1);
@@ -442,6 +473,10 @@ GX.educationalState.prototype = {
         calendar.anchor.setTo(.5, .5);
         game.add.tween(calendar).to({ x: GX.educationalIconX }, 1000, Phaser.Easing.Bounce.Out, true, 28000 + GX.globalTimingAdjustment);
         game.add.tween(calendar).to({ alpha: 0 }, 400, Phaser.Easing.Linear.Out, true, 30000);
+        game.time.events.add(28000, baloonFunction, this);
+
+
+
 
         text0 = game.add.text(game.world.centerX - GX.xOffset, 100, GX.text0_0, GX.styleQuestion);
         text0.lineSpacing = GX.questionSpacing;
@@ -2370,9 +2405,37 @@ function goBack() {
 
 }
 
+
+
+
+
 function cryFunction() {
     cry.play();
 }
+function bugleFunction() {
+    bugle.play();
+}
+function baloonFunction() {
+    baloon.play();
+}
+function gradSongFunction() {
+    gradSong.play();
+}
+
+function swish5Function() {
+    swish5.play();
+}
+function swish7Function() {
+    swish7.play();
+}
+function fallFunction() {
+    fall.play();
+}
+
+
+
+
+
 
 function replay() {
     switch (game.state.current) {
