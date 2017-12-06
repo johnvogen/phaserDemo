@@ -397,8 +397,8 @@ GX.educationalState.prototype = {
         game.add.sprite(0, GX.backgroundY, 'background');
 
 
-        cry = game.add.audio('cry');
-        //gradSong = game.add.audio('gradSong');
+        //cry = game.add.audio('cry');
+
 
         militaryMetal = game.add.sprite(GX.educationalIconX - 80, -450, 'militaryMetal');
         militaryMetal.scale.x = GX.educationalIconScale + .4;
