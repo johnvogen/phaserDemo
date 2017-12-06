@@ -397,7 +397,7 @@ GX.educationalState.prototype = {
         game.add.sprite(0, GX.backgroundY, 'background');
 
 
-        //cry = game.add.audio('cry');
+        cry = game.add.audio('cry');
 
 
         militaryMetal = game.add.sprite(GX.educationalIconX - 80, -450, 'militaryMetal');
@@ -416,7 +416,7 @@ GX.educationalState.prototype = {
         game.add.tween(pacifier.scale).to({ x: .8, y: .8 }, 800, Phaser.Easing.Bounce.Out, true, 20000 + GX.globalTimingAdjustment);
         game.add.tween(pacifier).to({ y: 1000 }, 1000, Phaser.Easing.Linear.Out, true, 23000 + GX.globalTimingAdjustment);
 
-        game.time.events.add(2000, cryFunction, this);
+        //game.time.events.add(2000, cryFunction, this);
         //game.time.events.add(2000, gradSongFunction, this);
 
         gradBooks = game.add.sprite(GX.educationalIconX, 300, 'gradBooks');
