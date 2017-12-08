@@ -1079,14 +1079,20 @@ GX.question1State.prototype = {
         text3 = game.add.text(game.world.centerX - GX.xOffset2, text2.position.y + text2.texture.height + GX.textDMZ, GX.text1_3, GX.styleAnswer);
 
         text1.lineSpacing = GX.questionSpacing;
+        text1.alpha = 0;
+        game.add.tween(text1).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 5000 + GX.globalTimingAdjustment);
 
         text2.inputEnabled = true;
         text2.events.onInputUp.add(proceed);
         text2.lineSpacing = GX.answerSpacing;
+        text2.alpha = 0;
+        game.add.tween(text2).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 5000 + GX.globalTimingAdjustment);
 
         text3.inputEnabled = true;
         text3.events.onInputUp.add(proceed);
         text3.lineSpacing = GX.answerSpacing;
+        text3.alpha = 0;
+        game.add.tween(text3).to({ alpha: 1 }, 400, Phaser.Easing.Bounce.Out, true, 5000 + GX.globalTimingAdjustment);
 
         text2.events.onInputOver.add(function () {
             console.log("Hover over");
